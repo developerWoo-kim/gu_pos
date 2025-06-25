@@ -10,8 +10,7 @@ class BodyText extends StatelessWidget {
   Color? color;
   FontWeight? fontWeight;
 
-  BodyText({
-    required this.title,
+  BodyText(this.title,{
     required this.textSize,
     this.color,
     this.fontWeight,
@@ -31,6 +30,7 @@ class BodyText extends StatelessWidget {
 }
 
 enum BodyTextSize {
+  SMALL(12),
   REGULAR(14),
   MEDIUM(16),
   LARGE(18);

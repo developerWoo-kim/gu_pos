@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gu_pos/guide/login_screen.dart';
 
 class StyleGuideScreen extends StatelessWidget {
   const StyleGuideScreen({super.key});
@@ -16,13 +17,13 @@ class StyleGuideScreen extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (_) => const (),
-                    //   ),
-                    // );
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const LoginScreen(),
+                      ),
+                    );
                   },
-                  child: Text('이동'),
+                  child: Text("이동"),
                 ),
               )
             ],

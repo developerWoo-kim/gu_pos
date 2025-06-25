@@ -59,7 +59,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/img/
+    - assets/img/logo/
     - assets/img/logo/
     - pubspec.yaml
 
