@@ -3,8 +3,8 @@ import 'dart:ui';
 
 /// 주 색상
 const PRIMARY_COLOR_01 = Color(0xFF4980ee);
-const PRIMARY_COLOR_02 = Color(0xFFE28932);
-const PRIMARY_COLOR_03 = Color(0xFF21495E);
+const PRIMARY_COLOR_02 = Color(0xFFd2d6db);
+const PRIMARY_COLOR_03 = Color(0xFF414b56);
 const PRIMARY_COLOR_04 = Color(0xFFFFFFFF);
 const PRIMARY_COLOR_05 = Color(0xFF1F1F1F);
 const PRIMARY_COLOR_06 = Color(0xFF868686);
@@ -30,3 +30,14 @@ const INPUT_BORDER_COLOR_02 = Color(0xFFF3F3F3);
 
 /// 텍스트 필드 텍스트 색상
 const INPUT_TEXT_COLOR_01 = Color(0xFF8a909f);
+
+/// 정리 필요 색상
+const SLIDER_BOX_COLOR_01 = Color(0xFFf3f4f5);
+
+const TEXT_COLOR_01 = Color(0xFF515a68);
+const TEXT_COLOR_02 = Color(0xFF8d95a0);
+const TEXT_COLOR_03 = Color(0xFF6d7683);
+const TEXT_COLOR_04 = Color(0xFFaeb8c0);
+
+
+
