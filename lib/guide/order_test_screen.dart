@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gu_pos/common/component/text/body_text.dart';
 
+import '../common/component/button/number_stepper.dart';
 import '../common/const/colors.dart';
 import '../common/layout/default_layout.dart';
 
@@ -23,6 +24,8 @@ class _OrderTestScreenState extends State<OrderTestScreen> with TickerProviderSt
   int initial = 1;
   bool isPayment = false;
   int initialValue = 0;
+
+  late int _counter = 1;
 
   @override
   void initState() {
@@ -83,7 +86,7 @@ class _OrderTestScreenState extends State<OrderTestScreen> with TickerProviderSt
                     child: Container(
                       color: PRIMARY_COLOR_02,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                         child: Column(
                           children: [
                             TabBar(
@@ -114,19 +117,50 @@ class _OrderTestScreenState extends State<OrderTestScreen> with TickerProviderSt
                                 controller: _tabController,
                                 physics: NeverScrollableScrollPhysics(), // 탭바에서 스크롤해도 옆으로 안넘어가는 설정
                                 children: [
-                                  Container(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            borderRadius: BorderRadius.circular(8)
-                                          ),
-                                          child: Text('dsds'),
-                                        )
-                                      ],
-                                    )
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    child: Container(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: Wrap(
+                                              spacing: 10,
+                                              runSpacing: 10,
+                                              children: List.generate(10, (index) {
+                                                return Container(
+                                                  width: MediaQuery.of(context).size.width * 0.115,
+                                                  height: MediaQuery.of(context).size.height * 0.145,
+                                                  decoration: BoxDecoration(
+                                                      color: PRIMARY_COLOR_01,
+                                                      borderRadius: BorderRadius.circular(7)
+                                                  ),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            BodyText('아메리카노', textSize: BodyTextSize.REGULAR,  color: PRIMARY_COLOR_04,)
+                                                          ],
+                                                        ),
+                                                        const Spacer(),
+                                                        Row(
+                                                          children: [
+                                                            BodyText('4,000', textSize: BodyTextSize.SMALL, color: PRIMARY_COLOR_04,)
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              })
+                                            ),
+                                          )
+                                        ]
+                                      )
+                                    ),
                                   ),
                                   Container(
                                     alignment: Alignment.center,
@@ -140,6 +174,80 @@ class _OrderTestScreenState extends State<OrderTestScreen> with TickerProviderSt
                                 ],
                               ),
                             ),
+
+                            Container(
+                              height: 200,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.edit_note, color: TEXT_COLOR_01, size: 24,),
+                                            SizedBox(width: 2,),
+                                            BodyText('편집모드', textSize: BodyTextSize.SMALL_HALF, fontWeight: FontWeight.w300, color: PRIMARY_COLOR_03,)
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(width: 18,),
+                                      InkWell(
+                                        onTap: () {
+
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.add_circle, color: TEXT_COLOR_01, size: 20,),
+                                            SizedBox(width: 2,),
+                                            BodyText('상품추가', textSize: BodyTextSize.SMALL_HALF, fontWeight: FontWeight.w300, color: PRIMARY_COLOR_03,)
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(height: 30,),
+                                  Row(
+                                    children: [
+                                      BodyText('옵션', textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500,),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10,),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Wrap(
+                                          spacing: 10,
+                                          runSpacing: 10,
+                                          children: List.generate(3, (index) {
+                                            return InkWell(
+                                              onTap: () {},
+                                              child: Container(
+                                                width: MediaQuery.of(context).size.width * 0.12,
+                                                height: 45,
+                                                decoration: BoxDecoration(
+                                                    color: BODY_TEXT_COLOR_01,
+                                                    borderRadius: BorderRadius.circular(7)
+                                                ),
+                                                child: Padding(
+                                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                                    child: Center(
+                                                      child: BodyText('Ice', textSize: BodyTextSize.SMALL),
+                                                    )
+                                                ),
+                                              ),
+                                            );
+                                          })
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+
                           ],
                         ),
                       ),
@@ -202,12 +310,172 @@ class _OrderTestScreenState extends State<OrderTestScreen> with TickerProviderSt
                             )
                           ],
                         ),
-                        Row(
-                          children: [],
+                        Expanded(
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              return SingleChildScrollView(
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                      minHeight: constraints.maxHeight //최소크기를 남은 크기로 지정
+                                  ),
+                                  child: IntrinsicHeight(
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: COLOR_eaf3fe,
+                                                  border: Border(
+                                                      bottom: BorderSide(
+                                                          color: INPUT_TEXT_COLOR_01,
+                                                          width: 0.2
+                                                      )
+                                                  )
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          const NumberStepper(),
+                                                          BodyText('할인', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_01,)
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          BodyText('할인', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_01,),
+                                                          BodyText('할인', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_01,)
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          BodyText('할인', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_01,),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                        Row(
-                          children: [],
-                        )
+                        Container(
+                          height: 180,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 14),
+                            child: Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: [
+                                Container(
+                                  width: 140,
+                                  height: 52,
+                                  decoration: BoxDecoration(
+                                      color: COLOR_eaf3fe,
+                                      borderRadius: BorderRadius.circular(7)
+                                  ),
+                                  child: Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                      child: Center(
+                                        child: BodyText('할인', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_01,),
+                                      )
+                                  ),
+                                ),
+                                Container(
+                                  width: 140,
+                                  height: 52,
+                                  decoration: BoxDecoration(
+                                      color: COLOR_f3f4f6,
+                                      borderRadius: BorderRadius.circular(7)
+                                  ),
+                                  child: Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                      child: Center(
+                                        child: BodyText('분할결제', textSize: BodyTextSize.LARGE, color: COLOR_505967,),
+                                      )
+                                  ),
+                                ),
+                                Container(
+                                  width: 140,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                      color: PRIMARY_COLOR_01,
+                                      borderRadius: BorderRadius.circular(7)
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      BodyText('주문', textSize: BodyTextSize.HUGE, fontWeight: FontWeight.w500, color: PRIMARY_COLOR_04,),
+                                      SizedBox(width: 6,),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: PRIMARY_COLOR_04,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                                            child: Center(
+                                              child: BodyText('8', textSize: BodyTextSize.REGULAR, fontWeight: FontWeight.w500, color: PRIMARY_COLOR_01,),
+                                            )
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  width: 140,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                      color: COLOR_505967,
+                                      borderRadius: BorderRadius.circular(7)
+                                  ),
+                                  child: Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              BodyText('결제', textSize: BodyTextSize.HUGE, fontWeight: FontWeight.w500, color: PRIMARY_COLOR_04,),
+                                              SizedBox(width: 6,),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: PRIMARY_COLOR_04,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Padding(
+                                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                                                    child: Center(
+                                                      child: BodyText('8', textSize: BodyTextSize.REGULAR, fontWeight: FontWeight.w500, color: PRIMARY_COLOR_01,),
+                                                    )
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          BodyText('25,000원', textSize: BodyTextSize.LARGE, fontWeight: FontWeight.w400, color: PRIMARY_COLOR_04,),
+                                        ],
+                                      )
+                                  ),
+                                )
+                              ],
+                            )
+                          ),
+                        ),
                       ],
                     ),
                   ),
