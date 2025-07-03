@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gu_pos/common/component/text/body_text.dart';
 
+import '../common/component/button/basic_button.dart';
 import '../common/component/button/number_stepper.dart';
 import '../common/const/colors.dart';
 import '../common/layout/default_layout.dart';
@@ -129,29 +130,34 @@ class _OrderTestScreenState extends State<OrderTestScreen> with TickerProviderSt
                                               spacing: 10,
                                               runSpacing: 10,
                                               children: List.generate(10, (index) {
-                                                return Container(
-                                                  width: MediaQuery.of(context).size.width * 0.115,
-                                                  height: MediaQuery.of(context).size.height * 0.145,
-                                                  decoration: BoxDecoration(
-                                                      color: PRIMARY_COLOR_01,
-                                                      borderRadius: BorderRadius.circular(7)
-                                                  ),
-                                                  child: Padding(
-                                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                                                    child: Column(
-                                                      children: [
-                                                        Row(
-                                                          children: [
-                                                            BodyText('아메리카노', textSize: BodyTextSize.REGULAR,  color: PRIMARY_COLOR_04,)
-                                                          ],
-                                                        ),
-                                                        const Spacer(),
-                                                        Row(
-                                                          children: [
-                                                            BodyText('4,000', textSize: BodyTextSize.SMALL, color: PRIMARY_COLOR_04,)
-                                                          ],
-                                                        )
-                                                      ],
+                                                return InkWell(
+                                                  onTap: () {
+
+                                                  },
+                                                  child: Container(
+                                                    width: MediaQuery.of(context).size.width * 0.115,
+                                                    height: MediaQuery.of(context).size.height * 0.145,
+                                                    decoration: BoxDecoration(
+                                                        color: PRIMARY_COLOR_01,
+                                                        borderRadius: BorderRadius.circular(7)
+                                                    ),
+                                                    child: Padding(
+                                                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                                      child: Column(
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              BodyText('아메리카노_$index', textSize: BodyTextSize.REGULAR,  color: PRIMARY_COLOR_04,)
+                                                            ],
+                                                          ),
+                                                          const Spacer(),
+                                                          Row(
+                                                            children: [
+                                                              BodyText('4,000', textSize: BodyTextSize.SMALL, color: PRIMARY_COLOR_04,)
+                                                            ],
+                                                          )
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 );
@@ -261,7 +267,7 @@ class _OrderTestScreenState extends State<OrderTestScreen> with TickerProviderSt
                         Row(
                           children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+                              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
                               child: Container(
                                 child: Row(
                                   children: [
@@ -335,27 +341,29 @@ class _OrderTestScreenState extends State<OrderTestScreen> with TickerProviderSt
                                                   )
                                                 ),
                                                 child: Padding(
-                                                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                                                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
                                                   child: Column(
                                                     children: [
                                                       Row(
                                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                         children: [
                                                           const NumberStepper(),
-                                                          BodyText('할인', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_01,)
+                                                          BasicButton('삭제', backgroundColor: PRIMARY_COLOR_04, textColor: TEXT_COLOR_05,)
                                                         ],
                                                       ),
+                                                      SizedBox(height: 12,),
                                                       Row(
                                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                         children: [
-                                                          BodyText('할인', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_01,),
-                                                          BodyText('할인', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_01,)
+                                                          BodyText('sample 티셔츠 x 1', textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500, color: COLOR_505967,),
+                                                          BodyText('4,500', textSize: BodyTextSize.REGULAR_HALF, color: COLOR_505967,)
                                                         ],
                                                       ),
+                                                      SizedBox(height: 8,),
                                                       Row(
                                                         mainAxisAlignment: MainAxisAlignment.start,
                                                         children: [
-                                                          BodyText('할인', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_01,),
+                                                          BodyText('Ice/샷추가(500)', textSize: BodyTextSize.SMALL_HALF, fontWeight: FontWeight.w300, color: COLOR_6e7784,),
                                                         ],
                                                       )
                                                     ],
@@ -461,7 +469,7 @@ class _OrderTestScreenState extends State<OrderTestScreen> with TickerProviderSt
                                                 child: Padding(
                                                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                                                     child: Center(
-                                                      child: BodyText('8', textSize: BodyTextSize.REGULAR, fontWeight: FontWeight.w500, color: PRIMARY_COLOR_01,),
+                                                      child: BodyText('8', textSize: BodyTextSize.REGULAR, fontWeight: FontWeight.w500, color: COLOR_505967,),
                                                     )
                                                 ),
                                               ),

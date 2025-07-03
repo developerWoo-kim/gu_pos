@@ -47,6 +47,7 @@ const TEXT_COLOR_05 = Color(0xFF353d4a);
 
 const COLOR_505967 = Color(0xFF505967);
 const COLOR_f3f4f6 = Color(0xFFf3f4f6);
+const COLOR_6e7784 = Color(0xFF6e7784);
 
 
 

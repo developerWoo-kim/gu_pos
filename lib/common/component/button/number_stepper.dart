@@ -36,11 +36,11 @@ class _NumberStepperState extends State<NumberStepper> {
         children: [
           InkWell(
             onTap: () {
-              _incrementCounter();
+              _decrementCounter();
             },
             child: Container(
               width: 46, // 원하는 터치 영역 너비
-              height: 46, // 원하는 터치 영역 높이
+              height: 40, // 원하는 터치 영역 높이
               alignment: Alignment.center,
               child: const Icon(Icons.remove, color: COLOR_505967,),
             ),
@@ -53,11 +53,11 @@ class _NumberStepperState extends State<NumberStepper> {
           ),
           InkWell(
             onTap: () {
-              _decrementCounter();
+              _incrementCounter();
             },
             child: Container(
               width: 46, // 원하는 터치 영역 너비
-              height: 46, // 원하는 터치 영역 높이
+              height: 40, // 원하는 터치 영역 높이
               alignment: Alignment.center,
               child: const Icon(Icons.add, color: COLOR_505967,),
             ),
