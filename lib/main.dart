@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gu_pos/common/layout/default_layout.dart';
 import 'package:gu_pos/style_guide_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+      const ProviderScope(
+        // observers: [
+        //   LoggerProvider()
+        // ],
+        child: MyApp(),
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {
