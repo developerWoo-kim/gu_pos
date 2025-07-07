@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gu_pos/common/layout/default_layout.dart';
 import 'package:gu_pos/style_guide_screen.dart';
 
+import 'common/const/colors.dart';
+
 void main() {
   runApp(
       const ProviderScope(
@@ -28,8 +30,11 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: DefaultLayout(
-        body: const StyleGuideScreen(),
+      home: Scaffold(
+        extendBody: true,
+        backgroundColor: PRIMARY_COLOR_04,
+        appBar: null,
+        body: StyleGuideScreen(),
       )
     );
   }

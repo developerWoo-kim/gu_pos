@@ -46,7 +46,7 @@ class OrderStateNotifier extends StateNotifier<OrderModel> {
     final existingIndex = state.orderItemList.indexWhere((e) => e.orderItemId == orderItemId);
     if (existingIndex != -1) {
       final updatedOptionList = [...state.orderItemList[existingIndex].itemOptionList];
-      state.orderItemList[existingIndex].copyWith(itemOptionList: );
+      // state.orderItemList[existingIndex].copyWith(itemOptionList: );
     }
     
   }
