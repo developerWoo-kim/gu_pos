@@ -40,14 +40,34 @@ class OrderStateNotifier extends StateNotifier<OrderModel> {
     state = state.copyWith(orderItemList: newList);
   }
 
-  void addItemOption(String orderItemId, {
+  void addItemOption(int orderItemIndex, {
     required ItemOptionModel item,
   }) {
-    final existingIndex = state.orderItemList.indexWhere((e) => e.orderItemId == orderItemId);
+    final currentItem = state.orderItemList[orderItemIndex];
+    final currentOptions = currentItem.itemOptionList;
+
+    final existingIndex = currentOptions.indexWhere((e) => e.optionId == item.optionId);
+
+    List<ItemOptionModel> updatedOptions;
+
     if (existingIndex != -1) {
-      final updatedOptionList = [...state.orderItemList[existingIndex].itemOptionList];
-      state.orderItemList[existingIndex].copyWith(itemOptionList: );
+      // 이미 있는 옵션: 수량 증가
+      final existingOption = currentOptions[existingIndex];
+      final updatedOption = existingOption.copyWith(
+        quantity: existingOption.quantity + item.quantity,
+      );
+
+      updatedOptions = [...currentOptions];
+      updatedOptions[existingIndex] = updatedOption;
+    } else {
+      // 없는 옵션: 새로 추가
+      updatedOptions = [...currentOptions, item];
     }
-    
+
+    final updatedItem = currentItem.copyWith(itemOptionList: updatedOptions);
+    final updatedItemList = [...state.orderItemList];
+    updatedItemList[orderItemIndex] = updatedItem;
+
+    state = state.copyWith(orderItemList: updatedItemList);
   }
 }

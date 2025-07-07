@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gu_pos/common/component/text/body_text.dart';
+import 'package:gu_pos/guide/model/item_option_model.dart';
 import 'package:gu_pos/guide/model/order_item_model.dart';
 import 'package:gu_pos/guide/provider/order_provider.dart';
 
@@ -240,7 +241,13 @@ class _OrderTestScreenState extends ConsumerState<OrderTestScreen> with TickerPr
                                           children: List.generate(3, (index) {
                                             return InkWell(
                                               onTap: () {
-
+                                                ref.read(orderProvider.notifier).addItemOption(selectedOrderItemIndex,
+                                                    item: ItemOptionModel(
+                                                      optionId: index,
+                                                      optionNm: '옵션_$index',
+                                                      optionPrice: 500,
+                                                    )
+                                                );
                                               },
                                               child: Container(
                                                 width: MediaQuery.of(context).size.width * 0.12,
@@ -358,6 +365,11 @@ class _OrderTestScreenState extends ConsumerState<OrderTestScreen> with TickerPr
                           children: state.orderItemList.length == 0
                               ? List.empty()
                               : List.generate(state.orderItemList.length, (index) {
+                            final itemOptions = state.orderItemList[index].itemOptionList;
+                            final optionText = itemOptions
+                                .map((e) => '${e.optionNm} x${e.quantity}')
+                                .join(' / ');
+
                             return MouseRegion(
                               cursor: SystemMouseCursors.click,
                               child: GestureDetector(
@@ -428,8 +440,8 @@ class _OrderTestScreenState extends ConsumerState<OrderTestScreen> with TickerPr
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
-                                                  BodyText('Ice/샷추가(500)', textSize: BodyTextSize.SMALL_HALF, fontWeight: FontWeight.w300, color: COLOR_6e7784,),
-                                                ],
+                                                  BodyText(optionText, textSize: BodyTextSize.SMALL_HALF, fontWeight: FontWeight.w300, color: COLOR_6e7784,)
+                                                ]
                                               )
                                             ],
                                           ),
