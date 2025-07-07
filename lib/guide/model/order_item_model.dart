@@ -36,6 +36,10 @@ class OrderItemModel {
     );
   }
 
+  OrderItemModel addOption(ItemOptionModel option) {
+    return copyWith(itemOptionList: [...itemOptionList, option]);
+  }
+
   factory OrderItemModel.fromJson(Map<String, dynamic> json) => _$OrderItemModelFromJson(json);
   Map<String, dynamic> toJson() => _$OrderItemModelToJson(this);
 
