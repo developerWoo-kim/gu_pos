@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../component/text/body_text.dart';
 import '../const/colors.dart';
 
 class DefaultLayout extends StatelessWidget {
@@ -21,7 +22,42 @@ class DefaultLayout extends StatelessWidget {
       extendBody: true,
       backgroundColor: backgroundColor ?? PRIMARY_COLOR_04,
       appBar: appBar,
-      body: body,
+      body: SizedBox.expand(
+        child: Column(
+          children: [
+            Container(
+              height: 60,
+              color: PRIMARY_COLOR_03,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.dehaze_sharp, color: PRIMARY_COLOR_04, size: 38),
+                    Container(
+                        child: Row(
+                          children: [
+                            BodyText('주문', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_04),
+                            Padding(padding: EdgeInsets.symmetric(horizontal: 16)),
+                            BodyText('현황', textSize: BodyTextSize.LARGE, color: TEXT_COLOR_04),
+                          ],
+                        )
+                    ),
+                    Container(
+                      child: Row(
+                        children: [
+                          BodyText('7.1(화) 오후 5:07', textSize: BodyTextSize.REGULAR, color: PRIMARY_COLOR_04, fontWeight: FontWeight.w300,)
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            body
+          ],
+        ),
+      ),
       bottomNavigationBar: bottomNavigationBar,
     );
   }

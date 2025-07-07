@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gu_pos/guide/login_screen.dart';
+import 'package:gu_pos/guide/order_status_screen.dart';
 import 'package:gu_pos/guide/order_test_screen.dart';
 
 class StyleGuideScreen extends StatelessWidget {
@@ -43,6 +44,23 @@ class StyleGuideScreen extends StatelessWidget {
                     );
                   },
                   child: Text("주문 화면"),
+                ),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const OrderStatusScreen(),
+                      ),
+                    );
+                  },
+                  child: Text("현황 화면"),
                 ),
               )
             ],
