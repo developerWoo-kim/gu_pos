@@ -177,11 +177,37 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
                           ),
 
                           Container(
-                            width: 320,
+                            width: 340,
                             color: PRIMARY_COLOR_04,
-                            child: Center(
-                              child: Text('data'),
-                            ),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: List.generate(50, (index) {
+                                        return Row(
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Expanded(child: BodyText('결제금액', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)),
+                                                      Expanded(child: BodyText('결제금액', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM))
+                                                    ],
+                                                  )
+                                                ],
+                                              )
+                                            )
+                                          ],
+                                        );
+                                      })
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                           )
 
                         ],
