@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gu_pos/guide/order_status_screen.dart';
+import 'package:gu_pos/guide/order_test_screen.dart';
 
 import '../component/text/body_text.dart';
 import '../const/colors.dart';
@@ -37,9 +39,27 @@ class DefaultLayout extends StatelessWidget {
                     Container(
                         child: Row(
                           children: [
-                            BodyText('주문', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_04),
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const OrderTestScreen(),
+                                  ),
+                                );
+                              },
+                              child: BodyText('주문', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_04)
+                            ),
                             Padding(padding: EdgeInsets.symmetric(horizontal: 16)),
-                            BodyText('현황', textSize: BodyTextSize.LARGE, color: TEXT_COLOR_04),
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const OrderStatusScreen(),
+                                  ),
+                                );
+                              },
+                              child: BodyText('현황', textSize: BodyTextSize.LARGE, color: TEXT_COLOR_04),
+                            )
                           ],
                         )
                     ),

@@ -6,7 +6,7 @@ const PRIMARY_COLOR_01 = Color(0xFF4980ee);
 const COLOR_eaf3fe = Color(0xFFeaf3fe);
 
 
-const PRIMARY_COLOR_02 = Color(0xFFd2d6db);
+const PRIMARY_COLOR_02 = Color(0xFFe6e8eb);
 const PRIMARY_COLOR_03 = Color(0xFF414b56);
 const PRIMARY_COLOR_04 = Color(0xFFFFFFFF);
 const PRIMARY_COLOR_05 = Color(0xFF1F1F1F);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gu_pos/common/component/app/order/order_status_view.dart';
 
 import '../common/component/text/body_text.dart';
 import '../common/const/colors.dart';
@@ -39,11 +40,11 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
             Expanded(
               child: Container(
                 color: PRIMARY_COLOR_02,
-                child: Padding(
-                  padding:EdgeInsets.symmetric(vertical:8, horizontal: 20),
-                  child: Column(
-                    children: [
-                      Container(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20, top: 8),
+                      child: Container(
                         decoration: BoxDecoration(
                                   border: Border(
                                       bottom: BorderSide(
@@ -125,12 +126,72 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
                             )
                           ],
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+
+
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TabBarView(
+                              controller: _tabController,
+                              physics: NeverScrollableScrollPhysics(), // 탭바에서 스크롤해도 옆으로 안넘어가는 설정
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
+                                    child: OrderStatusView(),
+                                  )
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Tab1 View',
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Tab1 View',
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Tab1 View',
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          Container(
+                            width: 320,
+                            color: PRIMARY_COLOR_04,
+                            child: Center(
+                              child: Text('data'),
+                            ),
+                          )
+
+                        ],
+                      ),
+                    )
+
+                  ],
                 )
               ),
-            )
+            ),
           ],
         ),
       )

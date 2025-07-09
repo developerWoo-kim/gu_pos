@@ -38,7 +38,8 @@ enum BodyTextSize {
   MEDIUM_HALF(17),
   LARGE(18),
   LARGE_HALF(19),
-  HUGE(22)
+  HUGE(20),
+  HUGE_HALF(21)
   ;
 
   const BodyTextSize(this.value);
