@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gu_pos/app/order/provider/order_status_provider.dart';
 import 'package:gu_pos/common/component/app/order/order_status_view.dart';
 
 
 import '../../../common/component/text/body_text.dart';
 import '../../../common/const/colors.dart';
 import '../../../common/layout/default_layout.dart';
+import '../model/order_model.dart';
 import '../provider/order_provider.dart';
 
 class OrderStatusScreen extends ConsumerStatefulWidget {
@@ -26,6 +28,10 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
       length: 4,
       vsync: this,  //vsync에 this 형태로 전달해야 애니메이션이 정상 처리됨
     );
+
+    _tabController.addListener(() {
+      print("선택된 탭 인덱스: ${_tabController.index}");
+    });
 
     super.initState();
   }
@@ -65,26 +71,10 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                               width: 350,
                               child: TabBar(
                                 tabs: [
-                                  Container(
-                                      height: 45,
-                                      alignment: Alignment.center,
-                                      child: BodyText('전체', color: _tabController.index == 0 ? BODY_TEXT_COLOR_02 : TEXT_COLOR_01, textSize: BodyTextSize.LARGE, fontWeight: FontWeight.w500,)
-                                  ),
-                                  Container(
-                                      height: 45,
-                                      alignment: Alignment.center,
-                                      child: BodyText('진행', color: _tabController.index == 1 ? BODY_TEXT_COLOR_02 : TEXT_COLOR_01, textSize: BodyTextSize.LARGE, fontWeight: FontWeight.w500,)
-                                  ),
-                                  Container(
-                                      height: 45,
-                                      alignment: Alignment.center,
-                                      child: BodyText('완료', color: _tabController.index == 1 ? BODY_TEXT_COLOR_02 : TEXT_COLOR_01, textSize: BodyTextSize.LARGE, fontWeight: FontWeight.w500,)
-                                  ),
-                                  Container(
-                                      height: 45,
-                                      alignment: Alignment.center,
-                                      child: BodyText('취소', color: _tabController.index == 1 ? BODY_TEXT_COLOR_02 : TEXT_COLOR_01, textSize: BodyTextSize.LARGE, fontWeight: FontWeight.w500,)
-                                  ),
+                                  Container(height: 45, alignment: Alignment.center,child: const Text('전체', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
+                                  Container(height: 45, alignment: Alignment.center,child: const Text('진행', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
+                                  Container(height: 45,alignment: Alignment.center, child: const Text('완료', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
+                                  Container(height: 45,alignment: Alignment.center, child: const Text('취소', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
                                 ],
                                 indicator: BoxDecoration(
                                     border: Border(
@@ -96,6 +86,8 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                                 indicatorWeight: 4.0,
                                 dividerColor: Colors.transparent,
                                 indicatorSize: TabBarIndicatorSize.tab,
+                                labelColor: BODY_TEXT_COLOR_02,
+                                unselectedLabelColor: TEXT_COLOR_01,
                                 controller: _tabController,
                               ),
                             ),
@@ -149,7 +141,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
   }
 
   Widget _buildOrderStatusView() {
-    final state = ref.watch(orderProvider);
+    final state = ref.read(orderStatusProvider);
     return Expanded(
       child: Row(
         children: [
@@ -162,12 +154,9 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                     alignment: Alignment.center,
                     child: Padding(
                         padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
-                        child: OrderStatusView(
-                            orderStatus: OrderStatus.PROGRESS,
-                            orderPrice: '4500',
-                            approvalStatus: ApprovalStatus.COMPLETE,
-                            orderItemList: state.orderItemList
-                        )
+                        child: state.isNotEmpty
+                          ? OrderStatusView(order: state[selectedIndex],)
+                          : Center(child: Text('표시할 주문이 없어요'),)
                     )
                 ),
                 Container(
@@ -200,7 +189,6 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
               ],
             ),
           ),
-
           Container(
               width: 340,
               color: PRIMARY_COLOR_04,
@@ -209,103 +197,186 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
-                          children: List.generate(50, (index) {
-                            return Row(
+                          children: [
+                            Row(
                               children: [
                                 Expanded(
                                     child: Column(
                                       children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: COLOR_f3f4f6,
-                                              border: Border(
-                                                  bottom: BorderSide(
-                                                      color: COLOR_505967,
-                                                      width: 0.2
-                                                  )
-                                              )
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                BodyText('진행 1', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.SMALL),
-                                                BodyText('최신순', color: TEXT_COLOR_01, textSize: BodyTextSize.SMALL)
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              selectedIndex = index;
-                                            });
-                                          },
-                                          child: Container(
-                                            color: selectedIndex == index ? COLOR_eaf3fe : null,
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.only(top: 16, bottom: 20, left: 12, right: 12),
-                                                    child: Column(
-                                                      children: [
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            BodyText('매장 002', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.REGULAR_HALF),
-                                                            BodyText('09:26', color: TEXT_COLOR_03, textSize: BodyTextSize.SMALL_HALF),
-                                                          ],
-                                                        ),
-                                                        SizedBox(height: 16,),
-                                                        Row(
-                                                          children: [
-                                                            Container(
-                                                              height: 30,
-                                                              width: 30,
-                                                              decoration: BoxDecoration(
-                                                                color: TEXT_COLOR_02,
-                                                                shape: BoxShape.circle,
-                                                              ),
-                                                              child: Center(
-                                                                child: BodyText('포스', color: PRIMARY_COLOR_04, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
-                                                              ),
-                                                            ),
-                                                            SizedBox(width: 10,),
-                                                            Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                              children: [
-                                                                BodyText('sample 티셔츠 1', color: COLOR_6e7784, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
-                                                                BodyText('4,000원', color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
-                                                              ],
-                                                            )
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        )
+                                        _buildAll(),
+
+                                        // InkWell(
+                                        //   onTap: () {
+                                        //     setState(() {
+                                        //
+                                        //     });
+                                        //   },
+                                        //   child: Container(
+                                        //     decoration: BoxDecoration(
+                                        //         color: PRIMARY_COLOR_04,
+                                        //         border: Border(
+                                        //             bottom: BorderSide(
+                                        //                 color: COLOR_505967,
+                                        //                 width: 0.1
+                                        //             )
+                                        //         )
+                                        //     ),
+                                        //     child: Row(
+                                        //       children: [
+                                        //         Expanded(
+                                        //           child: Padding(
+                                        //             padding: const EdgeInsets.only(top: 16, bottom: 20, left: 12, right: 12),
+                                        //             child: Column(
+                                        //               children: [
+                                        //                 Row(
+                                        //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        //                   children: [
+                                        //                     BodyText('매장 002', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.REGULAR_HALF),
+                                        //                     BodyText('09:26', color: TEXT_COLOR_03, textSize: BodyTextSize.SMALL_HALF),
+                                        //                   ],
+                                        //                 ),
+                                        //                 SizedBox(height: 16,),
+                                        //                 Row(
+                                        //                   children: [
+                                        //                     Container(
+                                        //                       height: 30,
+                                        //                       width: 30,
+                                        //                       decoration: BoxDecoration(
+                                        //                         color: TEXT_COLOR_02,
+                                        //                         shape: BoxShape.circle,
+                                        //                       ),
+                                        //                       child: Center(
+                                        //                         child: BodyText('포스', color: PRIMARY_COLOR_04, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
+                                        //                       ),
+                                        //                     ),
+                                        //                     SizedBox(width: 10,),
+                                        //                     Column(
+                                        //                       crossAxisAlignment: CrossAxisAlignment.start,
+                                        //                       mainAxisAlignment: MainAxisAlignment.center,
+                                        //                       children: [
+                                        //                         BodyText('sample 티셔츠 1', color: COLOR_6e7784, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
+                                        //                         BodyText('4,000원', color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
+                                        //                       ],
+                                        //                     )
+                                        //                   ],
+                                        //                 )
+                                        //               ],
+                                        //             ),
+                                        //           ),
+                                        //         )
+                                        //       ],
+                                        //     ),
+                                        //   ),
+                                        // ),
+
                                       ],
                                     )
                                 )
                               ],
-                            );
-                          })
+                            )
+                          ]
                       ),
                     ),
                   ),
                 ],
               )
           )
-
         ],
       ),
+    );
+  }
+
+  Widget _buildAll() {
+    return Column(
+      children: [
+        _buildProgress(),
+        _buildComplete(),
+        _buildCancel()
+      ],
+    );
+  }
+
+  Widget _buildProgress() {
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              color: COLOR_f3f4f6,
+              border: Border(
+                  bottom: BorderSide(
+                      color: COLOR_505967,
+                      width: 0.2
+                  )
+              )
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BodyText('진행', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.SMALL_HALF),
+                BodyText('최신순', color: TEXT_COLOR_01, textSize: BodyTextSize.SMALL)
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildComplete() {
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              color: COLOR_f3f4f6,
+              border: Border(
+                  bottom: BorderSide(
+                      color: COLOR_505967,
+                      width: 0.2
+                  )
+              )
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BodyText('완료 1', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.SMALL_HALF),
+                BodyText('최신순', color: TEXT_COLOR_01, textSize: BodyTextSize.SMALL)
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCancel() {
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              color: COLOR_f3f4f6,
+              border: Border(
+                  bottom: BorderSide(
+                      color: COLOR_505967,
+                      width: 0.2
+                  )
+              )
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BodyText('취소 1', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.SMALL_HALF),
+                BodyText('최신순', color: TEXT_COLOR_01, textSize: BodyTextSize.SMALL)
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

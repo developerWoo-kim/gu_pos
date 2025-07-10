@@ -41,6 +41,9 @@ class OrderItemModel {
     return copyWith(itemOptionList: [...itemOptionList, option]);
   }
 
+  int get totalPrice =>
+      price + itemOptionList.fold(0, (sum, option) => sum + option.optionPrice);
+
   factory OrderItemModel.fromJson(Map<String, dynamic> json) => _$OrderItemModelFromJson(json);
   Map<String, dynamic> toJson() => _$OrderItemModelToJson(this);
 

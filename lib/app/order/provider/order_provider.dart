@@ -1,13 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gu_pos/app/order/provider/order_status_provider.dart';
 import '../model/item_option_model.dart';
 import '../model/order_item_model.dart';
 import '../model/order_model.dart';
 
-final orderProvider = StateNotifierProvider<OrderStateNotifier, OrderModel>((ref) => OrderStateNotifier());
+final orderProvider = StateNotifierProvider<OrderStateNotifier, OrderModel>((ref) => OrderStateNotifier(ref));
 
 class OrderStateNotifier extends StateNotifier<OrderModel> {
-  OrderStateNotifier()
+  final Ref ref;
+
+  OrderStateNotifier(this.ref)
       : super(OrderModel(orderType: '', orderItemList: []));
+
+  void order() {
+    ref.read(orderStatusProvider.notifier).addOrder(state);
+    clearItems();
+  }
 
   void addItem(OrderItemModel item) {
     final existingIndex = state.orderItemList.indexWhere((e) => e.orderItemId == item.orderItemId);

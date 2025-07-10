@@ -1,33 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:gu_pos/common/component/button/basic_button.dart';
 import 'package:gu_pos/common/component/text/body_text.dart';
-// import 'package:gu_pos/guide/model/order_item_model.dart';
 
 import '../../../../app/order/model/order_item_model.dart';
+import '../../../../app/order/model/order_model.dart';
 import '../../../const/colors.dart';
 
 class OrderStatusView extends StatefulWidget {
-  final OrderStatus orderStatus;
-  final String orderPrice;
-  final String? salePrice;
-  final String? paymentMethod;
-  final String? paymentPrice;
-  final String? paymentDate;
-  final String? cancelDate;
-  final ApprovalStatus approvalStatus;
-  final List<OrderItemModel> orderItemList;
-
+  final OrderModel order;
 
   const OrderStatusView({
-    required this.orderStatus,
-    required this.orderPrice,
-    this.salePrice,
-    this.paymentMethod,
-    this.paymentPrice,
-    this.paymentDate,
-    this.cancelDate,
-    required this.approvalStatus,
-    required this.orderItemList,
+    required this.order,
     super.key
   });
 
@@ -64,7 +47,7 @@ class _OrderStatusViewState extends State<OrderStatusView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       BodyText('매장 001', color: TEXT_COLOR_01, textSize: BodyTextSize.MEDIUM_HALF, fontWeight: FontWeight.w500,),
-                      BodyText('메뉴 2개 총 8,500원', color: PRIMARY_COLOR_05, textSize: BodyTextSize.HUGE, fontWeight: FontWeight.w500,),
+                      BodyText('메뉴 ${widget.order.orderItemList.length}개 총 ${widget.order.totalPrice}원', color: PRIMARY_COLOR_05, textSize: BodyTextSize.HUGE, fontWeight: FontWeight.w500,),
                     ],
                   )
                 ],
@@ -272,22 +255,4 @@ class _OrderStatusViewState extends State<OrderStatusView> {
       ],
     );
   }
-}
-
-enum OrderStatus {
-  PROGRESS('진행'),
-  COMPLETE('완료'),
-  CANCEL('취소');
-
-  final String label;
-  const OrderStatus(this.label);
-}
-
-enum ApprovalStatus {
-  WAIT('결제대기'),
-  COMPLETE('결제완료'),
-  CANCEL('취소');
-
-  final String label;
-  const ApprovalStatus(this.label);
 }

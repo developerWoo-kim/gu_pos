@@ -471,31 +471,36 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                           )
                       ),
                     ),
-                    Container(
-                      width: 140,
-                      height: 100,
-                      decoration: BoxDecoration(
-                          color: PRIMARY_COLOR_01,
-                          borderRadius: BorderRadius.circular(7)
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          BodyText('주문', textSize: BodyTextSize.HUGE, fontWeight: FontWeight.w500, color: PRIMARY_COLOR_04,),
-                          SizedBox(width: 6,),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: PRIMARY_COLOR_04,
-                              shape: BoxShape.circle,
+                    InkWell(
+                      onTap: () {
+                        ref.read(orderProvider.notifier).order();
+                      },
+                      child: Container(
+                        width: 140,
+                        height: 100,
+                        decoration: BoxDecoration(
+                            color: PRIMARY_COLOR_01,
+                            borderRadius: BorderRadius.circular(7)
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            BodyText('주문', textSize: BodyTextSize.HUGE, fontWeight: FontWeight.w500, color: PRIMARY_COLOR_04,),
+                            SizedBox(width: 6,),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: PRIMARY_COLOR_04,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                                  child: Center(
+                                    child: BodyText('8', textSize: BodyTextSize.REGULAR, fontWeight: FontWeight.w500, color: PRIMARY_COLOR_01,),
+                                  )
+                              ),
                             ),
-                            child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                                child: Center(
-                                  child: BodyText('8', textSize: BodyTextSize.REGULAR, fontWeight: FontWeight.w500, color: PRIMARY_COLOR_01,),
-                                )
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     Container(
