@@ -307,8 +307,19 @@ class _OrderTestScreenState extends ConsumerState<OrderTestScreen> with TickerPr
                         },
                       ),
                       SizedBox(width: 8,),
-                      Padding(padding: EdgeInsets.symmetric(horizontal: 8) ,child: Icon(Icons.print, color: TEXT_COLOR_03, size: 26,)),
-                      Padding(padding: EdgeInsets.symmetric(horizontal: 8) ,child: Icon(Icons.delete, color: TEXT_COLOR_03, size: 26,)),
+                      Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Icon(Icons.print, color: TEXT_COLOR_03, size: 26,)
+                      ),
+                      InkWell(
+                        onTap: () {
+                          ref.read(orderProvider.notifier).clearItems();
+                        },
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Icon(Icons.delete, color: TEXT_COLOR_03, size: 26,)
+                        ),
+                      ),
                       Padding(padding: EdgeInsets.symmetric(horizontal: 8) ,child: Icon(Icons.bookmark, color: TEXT_COLOR_03, size: 26,)),
                     ],
                   ),

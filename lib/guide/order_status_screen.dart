@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gu_pos/common/component/app/order/order_status_view.dart';
+
 
 import '../common/component/text/body_text.dart';
 import '../common/const/colors.dart';
 import '../common/layout/default_layout.dart';
 
-class OrderStatusScreen extends StatefulWidget {
+class OrderStatusScreen extends ConsumerStatefulWidget {
   const OrderStatusScreen({super.key});
 
   @override
-  State<OrderStatusScreen> createState() => _OrderStatusScreenState();
+  ConsumerState<OrderStatusScreen> createState() => _OrderStatusScreenState();
 }
 
-class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProviderStateMixin {
+class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with TickerProviderStateMixin {
   late TabController _tabController;
+
+  int selectedIndex = 0;
 
   @override
   void initState() {
@@ -130,63 +134,8 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
                     ),
 
 
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TabBarView(
-                              controller: _tabController,
-                              physics: NeverScrollableScrollPhysics(), // 탭바에서 스크롤해도 옆으로 안넘어가는 설정
-                              children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
-                                    child: OrderStatusView(),
-                                  )
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Tab1 View',
-                                    style: TextStyle(
-                                      fontSize: 30,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Tab1 View',
-                                    style: TextStyle(
-                                      fontSize: 30,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Tab1 View',
-                                    style: TextStyle(
-                                      fontSize: 30,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          Container(
-                            width: 320,
-                            color: PRIMARY_COLOR_04,
-                            child: Center(
-                              child: Text('data'),
-                            ),
-                          )
-
-                        ],
-                      ),
-                    )
+                    /// 주문 화면
+                    _buildOrderStatusView()
 
                   ],
                 )
@@ -195,6 +144,167 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
           ],
         ),
       )
+    );
+  }
+
+  Widget _buildOrderStatusView() {
+    final state = ref.watch(orderProvider);
+    return Expanded(
+      child: Row(
+        children: [
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              physics: NeverScrollableScrollPhysics(), // 탭바에서 스크롤해도 옆으로 안넘어가는 설정
+              children: [
+                Container(
+                    alignment: Alignment.center,
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
+                        child: OrderStatusView(
+                            orderStatus: OrderStatus.PROGRESS,
+                            orderPrice: '4500',
+                            approvalStatus: ApprovalStatus.COMPLETE,
+                            orderItemList: state.orderItemList
+                        )
+                    )
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Tab1 View',
+                    style: TextStyle(
+                      fontSize: 30,
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Tab1 View',
+                    style: TextStyle(
+                      fontSize: 30,
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Tab1 View',
+                    style: TextStyle(
+                      fontSize: 30,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Container(
+              width: 340,
+              color: PRIMARY_COLOR_04,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                          children: List.generate(50, (index) {
+                            return Row(
+                              children: [
+                                Expanded(
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: COLOR_f3f4f6,
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color: COLOR_505967,
+                                                      width: 0.2
+                                                  )
+                                              )
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                BodyText('진행 1', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.SMALL),
+                                                BodyText('최신순', color: TEXT_COLOR_01, textSize: BodyTextSize.SMALL)
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              selectedIndex = index;
+                                            });
+                                          },
+                                          child: Container(
+                                            color: selectedIndex == index ? COLOR_eaf3fe : null,
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(top: 16, bottom: 20, left: 12, right: 12),
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            BodyText('매장 002', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.REGULAR_HALF),
+                                                            BodyText('09:26', color: TEXT_COLOR_03, textSize: BodyTextSize.SMALL_HALF),
+                                                          ],
+                                                        ),
+                                                        SizedBox(height: 16,),
+                                                        Row(
+                                                          children: [
+                                                            Container(
+                                                              height: 30,
+                                                              width: 30,
+                                                              decoration: BoxDecoration(
+                                                                color: TEXT_COLOR_02,
+                                                                shape: BoxShape.circle,
+                                                              ),
+                                                              child: Center(
+                                                                child: BodyText('포스', color: PRIMARY_COLOR_04, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
+                                                              ),
+                                                            ),
+                                                            SizedBox(width: 10,),
+                                                            Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                BodyText('sample 티셔츠 1', color: COLOR_6e7784, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
+                                                                BodyText('4,000원', color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
+                                                              ],
+                                                            )
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                )
+                              ],
+                            );
+                          })
+                      ),
+                    ),
+                  ),
+                ],
+              )
+          )
+
+        ],
+      ),
     );
   }
 }
