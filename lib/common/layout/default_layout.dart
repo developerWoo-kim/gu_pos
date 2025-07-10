@@ -49,7 +49,14 @@ class DefaultLayout extends StatelessWidget {
                               },
                               child: BodyText('주문', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_04)
                             ),
-                            Padding(padding: EdgeInsets.symmetric(horizontal: 16)),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                              child: VerticalDivider(
+                                width: 10,            // Divider가 차지하는 공간의 전체 너비
+                                thickness: 0.5,         // 선의 두께
+                                color: TEXT_COLOR_04,   // 선 색상
+                              ),
+                            ),
                             InkWell(
                               onTap: () {
                                 Navigator.of(context).push(
