@@ -1,8 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gu_pos/guide/model/item_option_model.dart';
-import 'package:gu_pos/guide/model/order_model.dart';
-
+import '../model/item_option_model.dart';
 import '../model/order_item_model.dart';
+import '../model/order_model.dart';
 
 final orderProvider = StateNotifierProvider<OrderStateNotifier, OrderModel>((ref) => OrderStateNotifier());
 

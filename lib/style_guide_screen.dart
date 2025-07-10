@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gu_pos/guide/login_screen.dart';
-import 'package:gu_pos/guide/order_status_screen.dart';
-import 'package:gu_pos/guide/order_test_screen.dart';
+import 'package:gu_pos/app/order/view/order_status_screen.dart';
+
+import 'app/order/view/order_screen.dart';
 
 class StyleGuideScreen extends StatelessWidget {
   const StyleGuideScreen({super.key});
@@ -39,7 +40,7 @@ class StyleGuideScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => const OrderTestScreen(),
+                        builder: (_) => const OrderScreen(),
                       ),
                     );
                   },

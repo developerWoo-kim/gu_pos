@@ -3,26 +3,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gu_pos/common/component/text/body_text.dart';
-import 'package:gu_pos/guide/model/item_option_model.dart';
-import 'package:gu_pos/guide/model/order_item_model.dart';
-import 'package:gu_pos/guide/provider/order_provider.dart';
 
-import '../common/component/button/basic_button.dart';
-import '../common/component/button/number_stepper.dart';
-import '../common/const/colors.dart';
-import '../common/layout/default_layout.dart';
+import '../../../common/component/button/basic_button.dart';
+import '../../../common/component/button/number_stepper.dart';
+import '../../../common/const/colors.dart';
+import '../../../common/layout/default_layout.dart';
+import '../model/item_option_model.dart';
+import '../model/order_item_model.dart';
+import '../provider/order_provider.dart';
 
-class OrderTestScreen extends ConsumerStatefulWidget {
-  const OrderTestScreen({super.key});
+class OrderScreen extends ConsumerStatefulWidget {
+  const OrderScreen({super.key});
 
   @override
-  ConsumerState<OrderTestScreen> createState() => _OrderTestScreenState();
+  ConsumerState<OrderScreen> createState() => _OrderTestScreenState();
 }
 
 enum SegmentType { news, map, paper }
 enum TestType { segmentation, max, news }
 
-class _OrderTestScreenState extends ConsumerState<OrderTestScreen> with TickerProviderStateMixin {
+class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProviderStateMixin {
   late TabController _tabController;
 
   TestType initialTestType = TestType.max;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gu_pos/guide/order_status_screen.dart';
-import 'package:gu_pos/guide/order_test_screen.dart';
+import 'package:gu_pos/app/order/view/order_status_screen.dart';
+import 'package:gu_pos/app/order/view/order_screen.dart';
 
 import '../component/text/body_text.dart';
 import '../const/colors.dart';
@@ -43,7 +43,7 @@ class DefaultLayout extends StatelessWidget {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (_) => const OrderTestScreen(),
+                                    builder: (_) => const OrderScreen(),
                                   ),
                                 );
                               },

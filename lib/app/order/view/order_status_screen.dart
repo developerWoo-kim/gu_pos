@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gu_pos/common/component/app/order/order_status_view.dart';
 
 
-import '../common/component/text/body_text.dart';
-import '../common/const/colors.dart';
-import '../common/layout/default_layout.dart';
+import '../../../common/component/text/body_text.dart';
+import '../../../common/const/colors.dart';
+import '../../../common/layout/default_layout.dart';
+import '../provider/order_provider.dart';
 
 class OrderStatusScreen extends ConsumerStatefulWidget {
   const OrderStatusScreen({super.key});

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gu_pos/common/component/button/basic_button.dart';
 import 'package:gu_pos/common/component/text/body_text.dart';
-import 'package:gu_pos/guide/model/order_item_model.dart';
+// import 'package:gu_pos/guide/model/order_item_model.dart';
 
+import '../../../../app/order/model/order_item_model.dart';
 import '../../../const/colors.dart';
 
 class OrderStatusView extends StatefulWidget {

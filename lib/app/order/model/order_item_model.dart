@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:gu_pos/guide/model/item_option_model.dart';
+
+import 'item_option_model.dart';
 
 part 'order_item_model.g.dart';
 
