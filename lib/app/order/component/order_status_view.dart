@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gu_pos/common/component/button/basic_button.dart';
 import 'package:gu_pos/common/component/text/body_text.dart';
+import 'package:gu_pos/common/utils/format_util.dart';
 
-import '../../../../app/order/model/order_item_model.dart';
-import '../../../../app/order/model/order_model.dart';
-import '../../../const/colors.dart';
+import '../model/order_item_model.dart';
+import '../model/order_model.dart';
+import '../../../common/const/colors.dart';
 
 class OrderStatusView extends StatefulWidget {
   final OrderModel order;
@@ -47,7 +48,7 @@ class _OrderStatusViewState extends State<OrderStatusView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       BodyText('매장 001', color: TEXT_COLOR_01, textSize: BodyTextSize.MEDIUM_HALF, fontWeight: FontWeight.w500,),
-                      BodyText('메뉴 ${widget.order.orderItemList.length}개 총 ${widget.order.totalPrice}원', color: PRIMARY_COLOR_05, textSize: BodyTextSize.HUGE, fontWeight: FontWeight.w500,),
+                      BodyText('메뉴 ${widget.order.orderItemList.length}개 총 ${FormatUtil.numberFormatter(widget.order.totalPrice)}원', color: PRIMARY_COLOR_05, textSize: BodyTextSize.HUGE, fontWeight: FontWeight.w500,),
                     ],
                   )
                 ],
@@ -70,7 +71,15 @@ class _OrderStatusViewState extends State<OrderStatusView> {
                   child: Container(
                     decoration: BoxDecoration(
                         color: PRIMARY_COLOR_04,
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20, right: 20, top: 40, bottom: 20),
@@ -80,7 +89,7 @@ class _OrderStatusViewState extends State<OrderStatusView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               BodyText('주문 금액', color: TEXT_COLOR_01, textSize: BodyTextSize.REGULAR_HALF),
-                              BodyText('8,500원', color: TEXT_COLOR_01, textSize: BodyTextSize.REGULAR_HALF),
+                              BodyText('${FormatUtil.numberFormatter(widget.order.totalPrice)}원', color: TEXT_COLOR_01, textSize: BodyTextSize.REGULAR_HALF),
                             ],
                           ),
                           const SizedBox(height: 16,),
@@ -96,7 +105,7 @@ class _OrderStatusViewState extends State<OrderStatusView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               BodyText('결제 금액', color: TEXT_COLOR_01, textSize: BodyTextSize.REGULAR_HALF),
-                              BodyText('8,500원', color: TEXT_COLOR_01, textSize: BodyTextSize.REGULAR_HALF),
+                              BodyText('${FormatUtil.numberFormatter(widget.order.totalPrice)}원', color: TEXT_COLOR_01, textSize: BodyTextSize.REGULAR_HALF),
                             ],
                           ),
                           const Padding(
@@ -131,7 +140,7 @@ class _OrderStatusViewState extends State<OrderStatusView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               BodyText('승인상태', color: TEXT_COLOR_01, textSize: BodyTextSize.REGULAR_HALF),
-                              BodyText('취소됨', color: TEXT_COLOR_01, textSize: BodyTextSize.REGULAR_HALF),
+                              BodyText(widget.order.approvalStatus!.label, color: BODY_TEXT_COLOR_02, textSize: BodyTextSize.MEDIUM),
                             ],
                           ),
                           const Spacer(),
@@ -150,7 +159,15 @@ class _OrderStatusViewState extends State<OrderStatusView> {
                 child: Container(
                   decoration: BoxDecoration(
                       color: PRIMARY_COLOR_04,
-                      borderRadius: BorderRadius.circular(10)
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
@@ -159,48 +176,69 @@ class _OrderStatusViewState extends State<OrderStatusView> {
                         Expanded(
                           child: ListView(
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    flex: 6,
-                                    child: BodyText('sample 청바지', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
-                                  ),
-                                  Expanded(
-                                    flex: 4,
-                                    child: Row(
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 16),
+                                child: Column(
+                                  children: [
+                                    Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        BodyText('1', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
-                                        BodyText('4,500원', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)
+                                        Expanded(
+                                          flex: 6,
+                                          child: BodyText('testest', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
+                                        ),
+                                        Expanded(
+                                          flex: 4,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              BodyText('1', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
+                                              BodyText('4,500원', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)
+                                            ],
+                                          ),
+                                        ),
                                       ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    flex: 6,
-                                    child: BodyText('sample 청바지', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
-                                  ),
-                                  Expanded(
-                                    flex: 4,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    Column(
                                       children: [
-                                        BodyText('1', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
-                                        BodyText('4,500원', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)
+                                        Row(
+                                          children: [
+                                            Expanded(child: BodyText('1', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)),
+                                          ],
+                                        )
                                       ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16,),
+                                  ],
+                                )
+                              )
                             ],
                           ),
+                          // child: ListView(
+                          //   children: List.generate(widget.order.orderItemList.length, (index) {
+                          //     return Padding(
+                          //       padding: EdgeInsets.only(bottom: 16),
+                          //       child: Row(
+                          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //         children: [
+                          //           Expanded(
+                          //             flex: 6,
+                          //             child: BodyText(widget.order.orderItemList[index].orderItemNm, color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
+                          //           ),
+                          //           Expanded(
+                          //             flex: 4,
+                          //             child: Row(
+                          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //               children: [
+                          //                 BodyText('${widget.order.orderItemList[index].quantity}', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
+                          //                 BodyText('${FormatUtil.numberFormatter(widget.order.orderItemList[index].totalPrice)}원', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)
+                          //               ],
+                          //             ),
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     );
+                          //   })
+                          // ),
                         ),
                         const Spacer(),
                         const Padding(
@@ -219,8 +257,8 @@ class _OrderStatusViewState extends State<OrderStatusView> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  BodyText('2', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
-                                  BodyText('8,500원', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)
+                                  BodyText('${widget.order.totalQuantity}', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
+                                  BodyText('${FormatUtil.numberFormatter(widget.order.totalPrice)}원', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)
                                 ],
                               ),
                             ),

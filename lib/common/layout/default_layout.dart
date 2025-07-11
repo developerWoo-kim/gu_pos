@@ -84,6 +84,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
                         );
                       },
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           BodyText('현황',
                               textSize: BodyTextSize.LARGE,

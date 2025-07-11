@@ -8,7 +8,8 @@ class OrderStatusStateNotifier extends StateNotifier<List<OrderModel>> {
       : super([]);
 
   void addOrder(OrderModel model) {
-    final updated = List<OrderModel>.from(state)..add(model);
+    OrderModel order = model.copyWith(orderIndex: state.length + 1, orderStatus: OrderStatus.PROGRESS, approvalStatus: ApprovalStatus.COMPLETE);
+    final updated = List<OrderModel>.from(state)..add(order);
     state = updated;
   }
 }

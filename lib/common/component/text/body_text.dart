@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../const/colors.dart';
 
@@ -9,6 +10,7 @@ class BodyText extends StatelessWidget {
   final BodyTextSize textSize;
   Color? color;
   FontWeight? fontWeight;
+  bool? numberFormat;
 
   BodyText(this.title,{
     required this.textSize,
