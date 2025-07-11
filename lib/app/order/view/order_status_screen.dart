@@ -399,13 +399,15 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                                   ),
                                 ),
                                 SizedBox(width: 10,),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    BodyText(orderList[index].totalOrderItemNm, color: COLOR_6e7784, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
-                                    BodyText(FormatUtil.numberFormatter(orderList[index].totalPrice), color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
-                                  ],
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      BodyText(orderList[index].totalOrderItemNm, color: COLOR_6e7784, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
+                                      BodyText(FormatUtil.numberFormatter(orderList[index].totalPrice), color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
+                                    ],
+                                  ),
                                 )
                               ],
                             )

@@ -22,6 +22,8 @@ class BodyText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(title,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: Platform.isIOS ? textSize.value + 1 : textSize.value,
         color: color ?? TEXT_COLOR_05,
