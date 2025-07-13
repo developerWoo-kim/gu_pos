@@ -12,4 +12,26 @@ class OrderStatusStateNotifier extends StateNotifier<List<OrderModel>> {
     final updated = List<OrderModel>.from(state)..add(order);
     state = updated;
   }
+
+  void completeOrder(int orderIndex) {
+    final index = state.indexWhere((order) => order.orderIndex == orderIndex);
+    final updatedList = [...state];
+    final order = updatedList.removeAt(index);
+    final updateOrder = order.copyWith(orderStatus: OrderStatus.COMPLETE);
+
+    updatedList.insert(0, updateOrder);
+
+    state = updatedList;
+  }
+
+  void completeCancelOrder(int orderIndex) {
+    final index = state.indexWhere((order) => order.orderIndex == orderIndex);
+    final updatedList = [...state];
+    final order = updatedList.removeAt(index);
+    final updateOrder = order.copyWith(orderStatus: OrderStatus.PROGRESS);
+
+    updatedList.insert(0, updateOrder);
+
+    state = updatedList;
+  }
 }

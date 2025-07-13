@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gu_pos/app/order/provider/order_status_provider.dart';
 import 'package:gu_pos/common/component/button/basic_button.dart';
 import 'package:gu_pos/common/component/text/body_text.dart';
 import 'package:gu_pos/common/utils/format_util.dart';
 
-import '../model/order_item_model.dart';
 import '../model/order_model.dart';
 import '../../../common/const/colors.dart';
 
-class OrderStatusView extends StatefulWidget {
+class OrderStatusView extends ConsumerStatefulWidget {
   final OrderModel order;
 
   const OrderStatusView({
@@ -16,10 +17,10 @@ class OrderStatusView extends StatefulWidget {
   });
 
   @override
-  State<OrderStatusView> createState() => _OrderStatusViewState();
+  ConsumerState<OrderStatusView> createState() => _OrderStatusViewState();
 }
 
-class _OrderStatusViewState extends State<OrderStatusView> {
+class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -54,10 +55,10 @@ class _OrderStatusViewState extends State<OrderStatusView> {
                 ],
               ),
             ),
-            BasicButton('완료',
-                backgroundColor: PRIMARY_COLOR_03,
-                textColor: PRIMARY_COLOR_04
-            ),
+            if(widget.order.orderStatus == OrderStatus.PROGRESS)
+              _buildCompleteButton(),
+            if(widget.order.orderStatus == OrderStatus.COMPLETE)
+              _buildCompleteCancelButton(),
           ],
         ),
 
@@ -175,9 +176,9 @@ class _OrderStatusViewState extends State<OrderStatusView> {
                       children: [
                         Expanded(
                           child: ListView(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 16),
+                            children: List.generate(widget.order.orderItemList.length, (index) {
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 18),
                                 child: Column(
                                   children: [
                                     Row(
@@ -185,60 +186,39 @@ class _OrderStatusViewState extends State<OrderStatusView> {
                                       children: [
                                         Expanded(
                                           flex: 6,
-                                          child: BodyText('testest', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
+                                          child: BodyText(widget.order.orderItemList[index].orderItemNm, color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
                                         ),
                                         Expanded(
                                           flex: 4,
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              BodyText('1', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
-                                              BodyText('4,500원', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)
+                                              BodyText('${widget.order.orderItemList[index].quantity}', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
+                                              BodyText('${FormatUtil.numberFormatter(widget.order.orderItemList[index].totalPrice)}원', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)
                                             ],
                                           ),
                                         ),
                                       ],
                                     ),
+                                    SizedBox(height: 12,),
                                     Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(child: BodyText('1', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)),
-                                          ],
-                                        )
-                                      ],
-                                    ),
+                                      children: List.generate(widget.order.orderItemList[index].itemOptionList.length, (optionIndex) {
+                                        final itemOption = widget.order.orderItemList[index].itemOptionList[optionIndex];
+                                        return Padding(
+                                          padding: const EdgeInsets.only(bottom: 4),
+                                          child: Row(
+                                            children: [
+                                              Expanded(child: BodyText('${itemOption.optionNm} (+${itemOption.optionPrice})',textSize: BodyTextSize.REGULAR_HALF, color: TEXT_COLOR_02,))
+                                            ],
+                                          ),
+                                        );
+                                      })
+                                    )
                                   ],
                                 )
-                              )
-                            ],
+                              );
+                            })
                           ),
-                          // child: ListView(
-                          //   children: List.generate(widget.order.orderItemList.length, (index) {
-                          //     return Padding(
-                          //       padding: EdgeInsets.only(bottom: 16),
-                          //       child: Row(
-                          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //         children: [
-                          //           Expanded(
-                          //             flex: 6,
-                          //             child: BodyText(widget.order.orderItemList[index].orderItemNm, color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
-                          //           ),
-                          //           Expanded(
-                          //             flex: 4,
-                          //             child: Row(
-                          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //               children: [
-                          //                 BodyText('${widget.order.orderItemList[index].quantity}', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
-                          //                 BodyText('${FormatUtil.numberFormatter(widget.order.orderItemList[index].totalPrice)}원', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)
-                          //               ],
-                          //             ),
-                          //           ),
-                          //         ],
-                          //       ),
-                          //     );
-                          //   })
-                          // ),
                         ),
                         const Spacer(),
                         const Padding(
@@ -291,6 +271,30 @@ class _OrderStatusViewState extends State<OrderStatusView> {
           ),
         )
       ],
+    );
+  }
+
+  Widget _buildCompleteButton() {
+    return InkWell(
+      onTap: () {
+        ref.read(orderStatusProvider.notifier).completeOrder(widget.order.orderIndex!);
+      },
+      child: BasicButton('완료',
+          backgroundColor: PRIMARY_COLOR_03,
+          textColor: PRIMARY_COLOR_04
+      ),
+    );
+  }
+
+  Widget _buildCompleteCancelButton() {
+    return InkWell(
+      onTap: () {
+        ref.read(orderStatusProvider.notifier).completeCancelOrder(widget.order.orderIndex!);
+      },
+      child: BasicButton('완료 취소',
+          backgroundColor: TEXT_COLOR_04,
+          textColor: TEXT_COLOR_05,
+      ),
     );
   }
 }

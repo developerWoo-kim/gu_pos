@@ -182,31 +182,31 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                     )
                 ),
                 Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Tab1 View',
-                    style: TextStyle(
-                      fontSize: 30,
-                    ),
-                  ),
+                    alignment: Alignment.center,
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
+                        child: state.where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull != null
+                            ? OrderStatusView(order: state.where((order) => order.orderStatus == OrderStatus.PROGRESS).first)
+                            : const Center(child: Text('표시할 주문이 없어요'),)
+                    )
                 ),
                 Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Tab1 View',
-                    style: TextStyle(
-                      fontSize: 30,
-                    ),
-                  ),
+                    alignment: Alignment.center,
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
+                        child: state.where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull != null
+                            ? OrderStatusView(order: state.where((order) => order.orderStatus == OrderStatus.PROGRESS).first)
+                            : const Center(child: Text('표시할 주문이 없어요'),)
+                    )
                 ),
                 Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Tab1 View',
-                    style: TextStyle(
-                      fontSize: 30,
-                    ),
-                  ),
+                    alignment: Alignment.center,
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
+                        child: state.where((order) => order.orderStatus == OrderStatus.CANCEL).firstOrNull != null
+                            ? OrderStatusView(order: state.where((order) => order.orderStatus == OrderStatus.CANCEL).first)
+                            : const Center(child: Text('표시할 주문이 없어요'),)
+                    )
                 ),
               ],
             ),
@@ -230,73 +230,9 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                                         if(selectedTapIndex == 1)
                                         _buildProgress(),
                                         if(selectedTapIndex == 2)
-                                        _buildComplete(),
+                                        _buildComplete(necessary: true),
                                         if(selectedTapIndex == 3)
-                                        _buildCancel()
-                                        // InkWell(
-                                        //   onTap: () {
-                                        //     setState(() {
-                                        //
-                                        //     });
-                                        //   },
-                                        //   child: Container(
-                                        //     decoration: BoxDecoration(
-                                        //         color: PRIMARY_COLOR_04,
-                                        //         border: Border(
-                                        //             bottom: BorderSide(
-                                        //                 color: COLOR_505967,
-                                        //                 width: 0.1
-                                        //             )
-                                        //         )
-                                        //     ),
-                                        //     child: Row(
-                                        //       children: [
-                                        //         Expanded(
-                                        //           child: Padding(
-                                        //             padding: const EdgeInsets.only(top: 16, bottom: 20, left: 12, right: 12),
-                                        //             child: Column(
-                                        //               children: [
-                                        //                 Row(
-                                        //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        //                   children: [
-                                        //                     BodyText('매장 002', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.REGULAR_HALF),
-                                        //                     BodyText('09:26', color: TEXT_COLOR_03, textSize: BodyTextSize.SMALL_HALF),
-                                        //                   ],
-                                        //                 ),
-                                        //                 SizedBox(height: 16,),
-                                        //                 Row(
-                                        //                   children: [
-                                        //                     Container(
-                                        //                       height: 30,
-                                        //                       width: 30,
-                                        //                       decoration: BoxDecoration(
-                                        //                         color: TEXT_COLOR_02,
-                                        //                         shape: BoxShape.circle,
-                                        //                       ),
-                                        //                       child: Center(
-                                        //                         child: BodyText('포스', color: PRIMARY_COLOR_04, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
-                                        //                       ),
-                                        //                     ),
-                                        //                     SizedBox(width: 10,),
-                                        //                     Column(
-                                        //                       crossAxisAlignment: CrossAxisAlignment.start,
-                                        //                       mainAxisAlignment: MainAxisAlignment.center,
-                                        //                       children: [
-                                        //                         BodyText('sample 티셔츠 1', color: COLOR_6e7784, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
-                                        //                         BodyText('4,000원', color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
-                                        //                       ],
-                                        //                     )
-                                        //                   ],
-                                        //                 )
-                                        //               ],
-                                        //             ),
-                                        //           ),
-                                        //         )
-                                        //       ],
-                                        //     ),
-                                        //   ),
-                                        // ),
-
+                                        _buildCancel(necessary: true),
                                       ],
                                     )
                                 )
@@ -319,13 +255,13 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
       children: [
         _buildProgress(),
         _buildComplete(),
-        _buildCancel()
+        _buildCancel(),
       ],
     );
   }
 
   Widget _buildProgress() {
-    final state = ref.read(orderStatusProvider);
+    final state = ref.watch(orderStatusProvider);
     List<OrderModel> orderList = state.where((order) => order.orderStatus == OrderStatus.PROGRESS).toList();
     orderList.sort((a, b) => a.orderIndex!.compareTo(b.orderIndex!));
     return Column(
@@ -345,7 +281,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                BodyText('진행', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.SMALL_HALF),
+                BodyText('진행 ${orderList.isNotEmpty ? orderList.length : ''}', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.SMALL_HALF),
                 BodyText('최신순', color: TEXT_COLOR_01, textSize: BodyTextSize.SMALL)
               ],
             ),
@@ -422,71 +358,237 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
           })
         ),
         if(orderList.isEmpty)
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: BodyText('진행중인 주문이 없어요', color: TEXT_COLOR_02, textSize: BodyTextSize.REGULAR),
-            )
-          ],
+        _buildEmptyOrder()
+      ],
+    );
+  }
+
+  Widget _buildComplete({
+    bool necessary = false
+}) {
+    final state = ref.watch(orderStatusProvider);
+    List<OrderModel> orderList = state.where((order) => order.orderStatus == OrderStatus.COMPLETE).toList();
+    orderList.sort((a, b) => a.orderIndex!.compareTo(b.orderIndex!));
+
+    if(!necessary && orderList.isEmpty) {
+      return Container();
+    }
+
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              color: COLOR_f3f4f6,
+              border: Border(
+                  bottom: BorderSide(
+                      color: COLOR_505967,
+                      width: 0.2
+                  )
+              )
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                BodyText('완료 ${orderList.isNotEmpty ? orderList.length : ''}', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.SMALL_HALF),
+              ],
+            ),
+          ),
+        ),
+        if(orderList.isNotEmpty)
+          Column(
+              children: List.generate(orderList.length, (index) {
+                return InkWell(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = orderList[index].orderIndex!;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: selectedIndex == orderList[index].orderIndex ? COLOR_eaf3fe : PRIMARY_COLOR_04,
+                        border: Border(
+                            bottom: BorderSide(
+                                color: COLOR_505967,
+                                width: 0.1
+                            )
+                        )
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 16, bottom: 20, left: 12, right: 12),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    BodyText('매장 002', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.REGULAR_HALF),
+                                    BodyText('09:26', color: TEXT_COLOR_03, textSize: BodyTextSize.SMALL_HALF),
+                                  ],
+                                ),
+                                SizedBox(height: 16,),
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: 30,
+                                      width: 30,
+                                      decoration: BoxDecoration(
+                                        color: TEXT_COLOR_02,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Center(
+                                        child: BodyText('포스', color: PRIMARY_COLOR_04, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10,),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          BodyText(orderList[index].totalOrderItemNm, color: COLOR_6e7784, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
+                                          BodyText(FormatUtil.numberFormatter(orderList[index].totalPrice), color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              })
+          ),
+        if(orderList.isEmpty)
+          _buildEmptyOrder()
+      ],
+    );
+  }
+
+  Widget _buildCancel({
+    bool necessary = false
+}) {
+    final state = ref.watch(orderStatusProvider);
+    List<OrderModel> orderList = state.where((order) => order.orderStatus == OrderStatus.CANCEL).toList();
+    orderList.sort((a, b) => a.orderIndex!.compareTo(b.orderIndex!));
+
+    if(!necessary && orderList.isEmpty) {
+      return Container();
+    }
+
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              color: COLOR_f3f4f6,
+              border: Border(
+                  bottom: BorderSide(
+                      color: COLOR_505967,
+                      width: 0.2
+                  )
+              )
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                BodyText('취소 ${orderList.isNotEmpty ? orderList.length : ''}', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.SMALL_HALF),
+              ],
+            ),
+          ),
+        ),
+        if(orderList.isNotEmpty)
+          Column(
+              children: List.generate(orderList.length, (index) {
+                return InkWell(
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = orderList[index].orderIndex!;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: selectedIndex == orderList[index].orderIndex ? COLOR_eaf3fe : PRIMARY_COLOR_04,
+                        border: Border(
+                            bottom: BorderSide(
+                                color: COLOR_505967,
+                                width: 0.1
+                            )
+                        )
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 16, bottom: 20, left: 12, right: 12),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    BodyText('매장 002', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.REGULAR_HALF),
+                                    BodyText('09:26', color: TEXT_COLOR_03, textSize: BodyTextSize.SMALL_HALF),
+                                  ],
+                                ),
+                                SizedBox(height: 16,),
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: 30,
+                                      width: 30,
+                                      decoration: BoxDecoration(
+                                        color: TEXT_COLOR_02,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Center(
+                                        child: BodyText('포스', color: PRIMARY_COLOR_04, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10,),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          BodyText(orderList[index].totalOrderItemNm, color: COLOR_6e7784, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
+                                          BodyText(FormatUtil.numberFormatter(orderList[index].totalPrice), color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              })
+          ),
+        if(orderList.isEmpty)
+          _buildEmptyOrder()
+      ],
+    );
+  }
+
+  Widget _buildEmptyOrder() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: BodyText('진행중인 주문이 없어요', color: TEXT_COLOR_02, textSize: BodyTextSize.REGULAR),
         )
-      ],
-    );
-  }
-
-  Widget _buildComplete() {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-              color: COLOR_f3f4f6,
-              border: Border(
-                  bottom: BorderSide(
-                      color: COLOR_505967,
-                      width: 0.2
-                  )
-              )
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                BodyText('완료 1', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.SMALL_HALF),
-                BodyText('최신순', color: TEXT_COLOR_01, textSize: BodyTextSize.SMALL)
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCancel() {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-              color: COLOR_f3f4f6,
-              border: Border(
-                  bottom: BorderSide(
-                      color: COLOR_505967,
-                      width: 0.2
-                  )
-              )
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                BodyText('취소 1', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.SMALL_HALF),
-                BodyText('최신순', color: TEXT_COLOR_01, textSize: BodyTextSize.SMALL)
-              ],
-            ),
-          ),
-        ),
       ],
     );
   }
