@@ -1,5 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:gu_pos/app/order/component/order_status_view.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'order_item_model.dart';
 
