@@ -52,6 +52,24 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
       print("선택된 탭 인덱스: ${_tabController.index}");
       setState(() {
         selectedTapIndex = _tabController.index;
+        if(selectedTapIndex == 0 || selectedTapIndex == 1) {
+          OrderModel? progressOrder = ref.read(orderStatusProvider).where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull;
+          if(progressOrder != null) {
+            selectedIndex = progressOrder.orderIndex!;
+          }
+        }
+        if(selectedTapIndex == 2) {
+          OrderModel? completeOrder = ref.read(orderStatusProvider).where((order) => order.orderStatus == OrderStatus.COMPLETE).firstOrNull;
+          if(completeOrder != null) {
+            selectedIndex = completeOrder.orderIndex!;
+          }
+        }
+        if(selectedTapIndex == 3) {
+          OrderModel? cancelOrder = ref.read(orderStatusProvider).where((order) => order.orderStatus == OrderStatus.CANCEL).firstOrNull;
+          if(cancelOrder != null) {
+            selectedIndex = cancelOrder.orderIndex!;
+          }
+        }
       });
     });
 
@@ -163,7 +181,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
   }
 
   Widget _buildOrderStatusView() {
-    final state = ref.read(orderStatusProvider);
+    final state = ref.watch(orderStatusProvider);
     return Expanded(
       child: Row(
         children: [
@@ -194,8 +212,8 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                     alignment: Alignment.center,
                     child: Padding(
                         padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
-                        child: state.where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull != null
-                            ? OrderStatusView(order: state.where((order) => order.orderStatus == OrderStatus.PROGRESS).first)
+                        child: state.where((order) => order.orderStatus == OrderStatus.COMPLETE).firstOrNull != null
+                            ? OrderStatusView(order: state.where((order) => order.orderStatus == OrderStatus.COMPLETE).first)
                             : const Center(child: Text('표시할 주문이 없어요'),)
                     )
                 ),
@@ -341,7 +359,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       BodyText(orderList[index].totalOrderItemNm, color: COLOR_6e7784, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
-                                      BodyText(FormatUtil.numberFormatter(orderList[index].totalPrice), color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
+                                      BodyText('${FormatUtil.numberFormatter(orderList[index].totalPrice)}원', color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
                                     ],
                                   ),
                                 )
@@ -450,7 +468,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           BodyText(orderList[index].totalOrderItemNm, color: COLOR_6e7784, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
-                                          BodyText(FormatUtil.numberFormatter(orderList[index].totalPrice), color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
+                                          BodyText('${FormatUtil.numberFormatter(orderList[index].totalPrice)}원', color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
                                         ],
                                       ),
                                     )
@@ -559,7 +577,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           BodyText(orderList[index].totalOrderItemNm, color: COLOR_6e7784, textSize: BodyTextSize.SMALL, fontWeight: FontWeight.w500),
-                                          BodyText(FormatUtil.numberFormatter(orderList[index].totalPrice), color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
+                                          BodyText('${FormatUtil.numberFormatter(orderList[index].totalPrice)}원', color: PRIMARY_COLOR_03, textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500)
                                         ],
                                       ),
                                     )

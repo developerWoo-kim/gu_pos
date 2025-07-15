@@ -145,10 +145,29 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                             ],
                           ),
                           const Spacer(),
-                          BasicButton('결제내역 보기',
-                            backgroundColor: COLOR_f3f4f6,
-                            textColor: TEXT_COLOR_01
-                          )
+                          if(widget.order.orderStatus == OrderStatus.CANCEL)
+                            BasicButton('결제내역 보기',
+                              backgroundColor: COLOR_f3f4f6,
+                              textColor: TEXT_COLOR_01
+                            ),
+                          if(widget.order.orderStatus != OrderStatus.CANCEL)
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: BasicButton('결제내역 보기',
+                                      backgroundColor: COLOR_f3f4f6,
+                                      textColor: TEXT_COLOR_01
+                                  ),
+                                ),
+                                SizedBox(width: 12,),
+                                Expanded(
+                                  child: BasicButton('결제 취소',
+                                      backgroundColor: COLOR_fceeef,
+                                      textColor: COLOR_d23e41
+                                  ),
+                                )
+                              ],
+                            )
                         ],
                       ),
                     ),
@@ -179,48 +198,50 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                             children: List.generate(widget.order.orderItemList.length, (index) {
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 18),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          flex: 6,
-                                          child: BodyText(widget.order.orderItemList[index].orderItemNm, color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
-                                        ),
-                                        Expanded(
-                                          flex: 4,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              BodyText('${widget.order.orderItemList[index].quantity}', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
-                                              BodyText('${FormatUtil.numberFormatter(widget.order.orderItemList[index].totalPrice)}원', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)
-                                            ],
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            flex: 6,
+                                            child: BodyText(widget.order.orderItemList[index].orderItemNm, color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 12,),
-                                    Column(
-                                      children: List.generate(widget.order.orderItemList[index].itemOptionList.length, (optionIndex) {
-                                        final itemOption = widget.order.orderItemList[index].itemOptionList[optionIndex];
-                                        return Padding(
-                                          padding: const EdgeInsets.only(bottom: 4),
-                                          child: Row(
-                                            children: [
-                                              Expanded(child: BodyText('${itemOption.optionNm} (+${itemOption.optionPrice})',textSize: BodyTextSize.REGULAR_HALF, color: TEXT_COLOR_02,))
-                                            ],
+                                          Expanded(
+                                            flex: 4,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                BodyText('${widget.order.orderItemList[index].quantity}', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
+                                                BodyText('${FormatUtil.numberFormatter(widget.order.orderItemList[index].totalPrice)}원', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)
+                                              ],
+                                            ),
                                           ),
-                                        );
-                                      })
-                                    )
-                                  ],
+                                        ],
+                                      ),
+                                      SizedBox(height: 12,),
+                                      Column(
+                                        children: List.generate(widget.order.orderItemList[index].itemOptionList.length, (optionIndex) {
+                                          final itemOption = widget.order.orderItemList[index].itemOptionList[optionIndex];
+                                          return Padding(
+                                            padding: const EdgeInsets.only(bottom: 4),
+                                            child: Row(
+                                              children: [
+                                                Expanded(child: BodyText('${itemOption.optionNm} (+${itemOption.optionPrice})',textSize: BodyTextSize.REGULAR_HALF, color: TEXT_COLOR_02,))
+                                              ],
+                                            ),
+                                          );
+                                        })
+                                      )
+                                    ],
+                                  ),
                                 )
                               );
                             })
                           ),
                         ),
-                        const Spacer(),
+                        // const Spacer(),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 12),
                           child: Divider(color: PRIMARY_COLOR_02,),
