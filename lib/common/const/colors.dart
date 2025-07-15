@@ -50,6 +50,8 @@ const COLOR_f3f4f6 = Color(0xFFf3f4f6);
 const COLOR_6e7784 = Color(0xFF6e7784);
 
 
+const COLOR_d23e41 = Color(0xFFd23e41);
+const COLOR_fceeef = Color(0xFFfceeef);
 
 
 
