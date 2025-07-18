@@ -2,12 +2,14 @@ import 'package:custom_sliding_segmented_control/custom_sliding_segmented_contro
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gu_pos/app/product/component/product_grid_view.dart';
 import 'package:gu_pos/common/component/text/body_text.dart';
 
 import '../../../common/component/button/basic_button.dart';
 import '../../../common/component/button/number_stepper.dart';
 import '../../../common/const/colors.dart';
 import '../../../common/layout/default_layout.dart';
+import '../../product/provider/product_provider.dart';
 import '../model/item_option_model.dart';
 import '../model/order_item_model.dart';
 import '../provider/order_provider.dart';
@@ -50,200 +52,209 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(productProvider);
     return DefaultLayout(
       body:  Expanded(
         child: Row(
           children: [
-            Expanded(
-              child: Container(
-                color: PRIMARY_COLOR_02,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                  child: Column(
-                    children: [
-                      TabBar(
-                        tabs: [
-                          Container(
-                              height: 45,
-                              alignment: Alignment.center,
-                              child: BodyText('즐겨찾는 메뉴', color: _tabController.index == 0 ? BODY_TEXT_COLOR_02 : TEXT_COLOR_01, textSize: BodyTextSize.LARGE, fontWeight: FontWeight.w500,)
-                          ),
-                          Container(
-                              height: 45,
-                              alignment: Alignment.center,
-                              child: BodyText('기본', color: _tabController.index == 1 ? BODY_TEXT_COLOR_02 : TEXT_COLOR_01, textSize: BodyTextSize.LARGE, fontWeight: FontWeight.w500,)
-                          ),
-                        ],
-                        indicator: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                  color: PRIMARY_COLOR_05, width: 2
-                              ),
-                            )
-                        ),
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        controller: _tabController,
-                      ),
-                      Expanded(
-                        child: TabBarView(
-                          controller: _tabController,
-                          physics: NeverScrollableScrollPhysics(), // 탭바에서 스크롤해도 옆으로 안넘어가는 설정
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child: Container(
-                                  child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Wrap(
-                                              spacing: 10,
-                                              runSpacing: 10,
-                                              children: List.generate(10, (index) {
-                                                return InkWell(
-                                                  onTap: () {
-                                                    ref.read(orderProvider.notifier).addItem(
-                                                        OrderItemModel(
-                                                            orderItemId: '아메리카노_$index',
-                                                            orderItemNm: '아메리카노_$index',
-                                                            price: 4500,
-                                                            quantity: 1
-                                                        )
-                                                    );
-                                                  },
-                                                  child: Container(
-                                                    width: MediaQuery.of(context).size.width * 0.115,
-                                                    height: MediaQuery.of(context).size.height * 0.145,
-                                                    decoration: BoxDecoration(
-                                                        color: PRIMARY_COLOR_01,
-                                                        borderRadius: BorderRadius.circular(7)
-                                                    ),
-                                                    child: Padding(
-                                                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                                                      child: Column(
-                                                        children: [
-                                                          Row(
-                                                            children: [
-                                                              BodyText('아메리카노_$index', textSize: BodyTextSize.REGULAR,  color: PRIMARY_COLOR_04,)
-                                                            ],
-                                                          ),
-                                                          const Spacer(),
-                                                          Row(
-                                                            children: [
-                                                              BodyText('4,000', textSize: BodyTextSize.SMALL, color: PRIMARY_COLOR_04,)
-                                                            ],
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              })
-                                          ),
-                                        )
-                                      ]
-                                  )
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Tab2 View',
-                                style: TextStyle(
-                                  fontSize: 30,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-
-                      Container(
-                        height: 200,
+            state.when(
+                loading: () => const CircularProgressIndicator(),
+                error: (e, _) => const Text('에러'),
+                data: (products) {
+                  return Expanded(
+                    child: Container(
+                      color: PRIMARY_COLOR_02,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
                           children: [
-                            Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.edit_note, color: TEXT_COLOR_01, size: 24,),
-                                      SizedBox(width: 2,),
-                                      BodyText('편집모드', textSize: BodyTextSize.SMALL_HALF, fontWeight: FontWeight.w300, color: PRIMARY_COLOR_03,)
-                                    ],
-                                  ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                          color: PRIMARY_COLOR_04, width: 0.5
+                                      ),
+                                    )
                                 ),
-                                SizedBox(width: 18,),
-                                InkWell(
-                                  onTap: () {
-
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.add_circle, color: TEXT_COLOR_01, size: 20,),
-                                      SizedBox(width: 2,),
-                                      BodyText('상품추가', textSize: BodyTextSize.SMALL_HALF, fontWeight: FontWeight.w300, color: PRIMARY_COLOR_03,)
-                                    ],
-                                  ),
-                                )
-                              ],
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      width: 350,
+                                      child: TabBar(
+                                        tabs: [
+                                          Container(height: 45, alignment: Alignment.center,child: const Text('즐겨찾는 메뉴', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
+                                          Container(height: 45, alignment: Alignment.center,child: const Text('기본', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
+                                        ],
+                                        indicator: BoxDecoration(
+                                            border: Border(
+                                              bottom: BorderSide(
+                                                  color: PRIMARY_COLOR_05, width: 2
+                                              ),
+                                            )
+                                        ),
+                                        indicatorWeight: 4.0,
+                                        dividerColor: Colors.transparent,
+                                        indicatorSize: TabBarIndicatorSize.tab,
+                                        labelColor: BODY_TEXT_COLOR_02,
+                                        unselectedLabelColor: TEXT_COLOR_01,
+                                        controller: _tabController,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 40,
+                                          width: 40,
+                                          decoration: BoxDecoration(
+                                              color: BODY_TEXT_COLOR_01,
+                                              borderRadius: BorderRadius.circular(7)
+                                          ),
+                                          child: Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 5,),
+                                              child: Center(
+                                                  child: Icon(Icons.search, size: 28,)
+                                              )
+                                          ),
+                                        ),
+                                        // SizedBox(width: 12,),
+                                        // Container(
+                                        //   height: 40,
+                                        //   decoration: BoxDecoration(
+                                        //       color: BODY_TEXT_COLOR_01,
+                                        //       borderRadius: BorderRadius.circular(7)
+                                        //   ),
+                                        //   child: Padding(
+                                        //     padding: EdgeInsets.symmetric(horizontal: 12,),
+                                        //     child: Center(child: BodyText('전체완료', textSize: BodyTextSize.REGULAR)),
+                                        //   ),
+                                        // ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
-                            SizedBox(height: 30,),
-                            Row(
-                              children: [
-                                BodyText('옵션', textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500,),
-                              ],
-                            ),
-                            SizedBox(height: 10,),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Wrap(
-                                      spacing: 10,
-                                      runSpacing: 10,
-                                      children: List.generate(3, (index) {
-                                        return InkWell(
-                                          onTap: () {
-                                            ref.read(orderProvider.notifier).addItemOption(selectedOrderItemIndex,
-                                                item: ItemOptionModel(
-                                                  optionId: index,
-                                                  optionNm: '옵션_$index',
-                                                  optionPrice: 500,
-                                                )
-                                            );
-                                          },
+                            Expanded(
+                              child: TabBarView(
+                                controller: _tabController,
+                                physics: NeverScrollableScrollPhysics(), // 탭바에서 스크롤해도 옆으로 안넘어가는 설정
+                                children: [
+                                  state.when(
+                                      data: (products) {
+                                        return Padding(
+                                          padding: EdgeInsets.symmetric(vertical: 10),
                                           child: Container(
-                                            width: MediaQuery.of(context).size.width * 0.12,
-                                            height: 45,
-                                            decoration: BoxDecoration(
-                                                color: BODY_TEXT_COLOR_01,
-                                                borderRadius: BorderRadius.circular(7)
-                                            ),
-                                            child: Padding(
-                                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                                                child: Center(
-                                                  child: BodyText('옵션_$index', textSize: BodyTextSize.SMALL),
-                                                )
-                                            ),
+                                              child: ProductGridView(productList: products)
                                           ),
                                         );
-                                      })
+                                      },
+                                      error: (e, _) => const Text('에러'),
+                                      loading: () => const CircularProgressIndicator()
                                   ),
-                                )
-                              ],
-                            )
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'Tab2 View',
+                                      style: TextStyle(
+                                        fontSize: 30,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 20,),
+                            Container(
+                              height: 150,
+                              child: Column(
+                                children: [
+                                  // Row(
+                                  //   children: [
+                                  //     InkWell(
+                                  //       onTap: () {
+                                  //
+                                  //       },
+                                  //       child: Row(
+                                  //         children: [
+                                  //           Icon(Icons.edit_note, color: TEXT_COLOR_01, size: 24,),
+                                  //           SizedBox(width: 2,),
+                                  //           BodyText('편집모드', textSize: BodyTextSize.SMALL_HALF, fontWeight: FontWeight.w300, color: PRIMARY_COLOR_03,)
+                                  //         ],
+                                  //       ),
+                                  //     ),
+                                  //     SizedBox(width: 18,),
+                                  //     InkWell(
+                                  //       onTap: () {
+                                  //
+                                  //       },
+                                  //       child: Row(
+                                  //         children: [
+                                  //           Icon(Icons.add_circle, color: TEXT_COLOR_01, size: 20,),
+                                  //           SizedBox(width: 2,),
+                                  //           BodyText('상품추가', textSize: BodyTextSize.SMALL_HALF, fontWeight: FontWeight.w300, color: PRIMARY_COLOR_03,)
+                                  //         ],
+                                  //       ),
+                                  //     )
+                                  //   ],
+                                  // ),
+                                  // SizedBox(height: 30,),
+                                  Row(
+                                    children: [
+                                      BodyText('옵션', textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500,),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10,),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Wrap(
+                                            spacing: 10,
+                                            runSpacing: 10,
+                                            children: List.generate(3, (index) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  ref.read(orderProvider.notifier).addItemOption(selectedOrderItemIndex,
+                                                      item: ItemOptionModel(
+                                                        optionId: index,
+                                                        optionNm: '옵션_$index',
+                                                        optionPrice: 500,
+                                                      )
+                                                  );
+                                                },
+                                                child: Container(
+                                                  width: MediaQuery.of(context).size.width * 0.12,
+                                                  height: 45,
+                                                  decoration: BoxDecoration(
+                                                      color: BODY_TEXT_COLOR_01,
+                                                      borderRadius: BorderRadius.circular(7)
+                                                  ),
+                                                  child: Padding(
+                                                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                                      child: Center(
+                                                        child: BodyText('옵션_$index', textSize: BodyTextSize.SMALL),
+                                                      )
+                                                  ),
+                                                ),
+                                              );
+                                            })
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+
                           ],
                         ),
                       ),
-
-                    ],
-                  ),
-                ),
-              ),
+                    ),
+                  );
+                },
             ),
 
             ///
@@ -337,10 +348,10 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                     ),
                     child: IntrinsicHeight(
                       child: Column(
-                          children: state.orderItemList.length == 0
+                          children: state.orderProductList.length == 0
                               ? List.empty()
-                              : List.generate(state.orderItemList.length, (index) {
-                            final itemOptions = state.orderItemList[index].itemOptionList;
+                              : List.generate(state.orderProductList.length, (index) {
+                            final itemOptions = state.orderProductList[index].itemOptionList;
                             final optionText = itemOptions
                                 .map((e) => '${e.optionNm} x${e.quantity}')
                                 .join(' / ');
@@ -377,15 +388,15 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
                                                       NumberStepper(
-                                                        counter: state.orderItemList[index].quantity,
+                                                        counter: state.orderProductList[index].quantity,
                                                         onIncrement: () {
-                                                          final updatedList = [...state.orderItemList];
+                                                          final updatedList = [...state.orderProductList];
                                                           final item = updatedList[index];
                                                           updatedList[index] = item.copyWith(quantity: item.quantity + 1);
                                                           ref.read(orderProvider.notifier).updateOrderList(updatedList);
                                                         },
                                                         onDecrement: () {
-                                                          final updatedList = [...state.orderItemList];
+                                                          final updatedList = [...state.orderProductList];
                                                           final item = updatedList[index];
                                                           if(item.quantity > 1) {
                                                             updatedList[index] = item.copyWith(quantity: item.quantity - 1);
@@ -407,7 +418,7 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  BodyText('${state.orderItemList[index].orderItemNm} x${state.orderItemList[index].quantity}', textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500, color: COLOR_505967,),
+                                                  BodyText('${state.orderProductList[index].orderItemNm} x${state.orderProductList[index].quantity}', textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500, color: COLOR_505967,),
                                                   BodyText('4,500', textSize: BodyTextSize.REGULAR_HALF, color: COLOR_505967,)
                                                 ],
                                               ),

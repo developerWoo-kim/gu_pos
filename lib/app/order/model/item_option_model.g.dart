@@ -11,6 +11,7 @@ ItemOptionModel _$ItemOptionModelFromJson(Map<String, dynamic> json) =>
       optionId: (json['optionId'] as num).toInt(),
       optionNm: json['optionNm'] as String,
       optionPrice: (json['optionPrice'] as num).toInt(),
+      quantity: (json['quantity'] as num?)?.toInt() ?? 1,
     );
 
 Map<String, dynamic> _$ItemOptionModelToJson(ItemOptionModel instance) =>
@@ -18,4 +19,5 @@ Map<String, dynamic> _$ItemOptionModelToJson(ItemOptionModel instance) =>
       'optionId': instance.optionId,
       'optionNm': instance.optionNm,
       'optionPrice': instance.optionPrice,
+      'quantity': instance.quantity,
     };

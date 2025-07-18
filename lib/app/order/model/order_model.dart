@@ -9,14 +9,14 @@ part 'order_model.g.dart';
 class OrderModel {
   final int? orderIndex;
   final String orderType;
-  final List<OrderItemModel> orderItemList;
+  final List<OrderItemModel> orderProductList;
   final OrderStatus? orderStatus;
   final ApprovalStatus? approvalStatus;
 
   OrderModel({
     this.orderIndex,
     required this.orderType,
-    required this.orderItemList,
+    required this.orderProductList,
     this.orderStatus,
     this.approvalStatus,
   });
@@ -24,27 +24,27 @@ class OrderModel {
   OrderModel copyWith({
     int? orderIndex,
     String? orderType,
-    List<OrderItemModel>? orderItemList,
+    List<OrderItemModel>? orderProductList,
     OrderStatus? orderStatus,
     ApprovalStatus? approvalStatus,
   }) {
     return OrderModel(
       orderIndex: orderIndex ?? this.orderIndex,
       orderType: orderType ?? this.orderType,
-      orderItemList: orderItemList ?? this.orderItemList,
+      orderProductList: orderProductList ?? this.orderProductList,
       orderStatus: orderStatus ?? this.orderStatus,
       approvalStatus: approvalStatus ?? this.approvalStatus,
     );
   }
 
   int get totalPrice =>
-      orderItemList.fold(0, (sum, item) => sum + item.totalPrice);
+      orderProductList.fold(0, (sum, item) => sum + item.totalPrice);
 
   int get totalQuantity =>
-      orderItemList.fold(0, (sum, item) => sum + item.quantity);
+      orderProductList.fold(0, (sum, item) => sum + item.quantity);
 
   String get totalOrderItemNm =>
-      orderItemList.map((item) => '${item.orderItemNm} x${item.quantity}').join(', ');
+      orderProductList.map((item) => '${item.orderItemNm} x${item.quantity}').join(', ');
 
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => _$OrderModelFromJson(json);

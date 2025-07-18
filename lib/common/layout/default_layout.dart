@@ -4,6 +4,7 @@ import 'package:gu_pos/app/order/provider/order_status_provider.dart';
 import 'package:gu_pos/app/order/view/order_status_screen.dart';
 import 'package:gu_pos/app/order/view/order_screen.dart';
 
+import '../../app/order/service/order_socket_service.dart';
 import '../component/text/body_text.dart';
 import '../const/colors.dart';
 
@@ -25,6 +26,29 @@ class DefaultLayout extends ConsumerStatefulWidget {
 }
 
 class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
+  final OrderSocketService _orderSocketService = OrderSocketService();
+  String? receivedMessage;
+  late final Stream<String> _messageStream;
+
+  @override
+  void initState() {
+    _orderSocketService.connect();
+    _messageStream = _orderSocketService.messageStream;
+    _messageStream.listen((message) {
+      ref.watch(orderStatusProvider.notifier).reload();
+      setState(() {
+        receivedMessage = message;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _orderSocketService.disconnect();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,82 +69,88 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
 
   Widget _buildHeader() {
     final state = ref.watch(orderStatusProvider);
-    return Container(
-      height: 60,
-      color: PRIMARY_COLOR_03,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Icon(Icons.dehaze_sharp, color: PRIMARY_COLOR_04, size: 38),
-            Container(
-                child: Row(
-                  children: [
-                    InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const OrderScreen(),
-                            ),
-                          );
-                        },
-                        child: BodyText('주문', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_04)
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                      child: VerticalDivider(
-                        width: 10,            // Divider가 차지하는 공간의 전체 너비
-                        thickness: 0.5,         // 선의 두께
-                        color: TEXT_COLOR_04,   // 선 색상
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const OrderStatusScreen(),
+    return state.when(
+      error: (e, _) => const Text('에러'),
+      loading: () => const CircularProgressIndicator(),
+      data: (orders) {
+        return Container(
+          height: 60,
+          color: PRIMARY_COLOR_03,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Icon(Icons.dehaze_sharp, color: PRIMARY_COLOR_04, size: 38),
+                Container(
+                    child: Row(
+                      children: [
+                        InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const OrderScreen(),
+                                ),
+                              );
+                            },
+                            child: BodyText('주문', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_04)
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                          child: VerticalDivider(
+                            width: 10,            // Divider가 차지하는 공간의 전체 너비
+                            thickness: 0.5,         // 선의 두께
+                            color: TEXT_COLOR_04,   // 선 색상
                           ),
-                        );
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          BodyText('현황',
-                              textSize: BodyTextSize.LARGE,
-                              color: TEXT_COLOR_04
-                          ),
-                          if(state.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(left: 6),
-                            child: Container(
-                              height: 22,
-                              width: 22,
-                              decoration: BoxDecoration(
-                                color: PRIMARY_COLOR_01,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Center(
-                                child: BodyText('${state.length}', color: PRIMARY_COLOR_04, textSize: BodyTextSize.SMALL),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
+                        ),
+                        InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const OrderStatusScreen(),
+                                ),
+                              );
+                            },
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                BodyText('현황',
+                                    textSize: BodyTextSize.LARGE,
+                                    color: TEXT_COLOR_04
+                                ),
+                                if(state.value!.isNotEmpty)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 6),
+                                    child: Container(
+                                      height: 22,
+                                      width: 22,
+                                      decoration: BoxDecoration(
+                                        color: PRIMARY_COLOR_01,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Center(
+                                        child: BodyText('${state.value!.length}', color: PRIMARY_COLOR_04, textSize: BodyTextSize.SMALL),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            )
+                        )
+                      ],
                     )
-                  ],
+                ),
+                Container(
+                  child: Row(
+                    children: [
+                      BodyText('7.1(화) 오후 5:07', textSize: BodyTextSize.REGULAR, color: PRIMARY_COLOR_04, fontWeight: FontWeight.w300,)
+                    ],
+                  ),
                 )
+              ],
             ),
-            Container(
-              child: Row(
-                children: [
-                  BodyText('7.1(화) 오후 5:07', textSize: BodyTextSize.REGULAR, color: PRIMARY_COLOR_04, fontWeight: FontWeight.w300,)
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+          ),
+        );
+      }
     );
   }
 }

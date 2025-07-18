@@ -49,7 +49,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       BodyText('매장 001', color: TEXT_COLOR_01, textSize: BodyTextSize.MEDIUM_HALF, fontWeight: FontWeight.w500,),
-                      BodyText('메뉴 ${widget.order.orderItemList.length}개 총 ${FormatUtil.numberFormatter(widget.order.totalPrice)}원', color: PRIMARY_COLOR_05, textSize: BodyTextSize.HUGE, fontWeight: FontWeight.w500,),
+                      BodyText('메뉴 ${widget.order.orderProductList.length}개 총 ${FormatUtil.numberFormatter(widget.order.totalPrice)}원', color: PRIMARY_COLOR_05, textSize: BodyTextSize.HUGE, fontWeight: FontWeight.w500,),
                     ],
                   )
                 ],
@@ -195,7 +195,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                       children: [
                         Expanded(
                           child: ListView(
-                            children: List.generate(widget.order.orderItemList.length, (index) {
+                            children: List.generate(widget.order.orderProductList.length, (index) {
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 18),
                                 child: Center(
@@ -206,15 +206,15 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                                         children: [
                                           Expanded(
                                             flex: 6,
-                                            child: BodyText(widget.order.orderItemList[index].orderItemNm, color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
+                                            child: BodyText(widget.order.orderProductList[index].orderItemNm, color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
                                           ),
                                           Expanded(
                                             flex: 4,
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                BodyText('${widget.order.orderItemList[index].quantity}', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
-                                                BodyText('${FormatUtil.numberFormatter(widget.order.orderItemList[index].totalPrice)}원', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)
+                                                BodyText('${widget.order.orderProductList[index].quantity}', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
+                                                BodyText('${FormatUtil.numberFormatter(widget.order.orderProductList[index].totalPrice)}원', color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM)
                                               ],
                                             ),
                                           ),
@@ -222,8 +222,8 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                                       ),
                                       SizedBox(height: 12,),
                                       Column(
-                                        children: List.generate(widget.order.orderItemList[index].itemOptionList.length, (optionIndex) {
-                                          final itemOption = widget.order.orderItemList[index].itemOptionList[optionIndex];
+                                        children: List.generate(widget.order.orderProductList[index].itemOptionList.length, (optionIndex) {
+                                          final itemOption = widget.order.orderProductList[index].itemOptionList[optionIndex];
                                           return Padding(
                                             padding: const EdgeInsets.only(bottom: 4),
                                             child: Row(

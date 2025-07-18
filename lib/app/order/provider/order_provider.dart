@@ -10,16 +10,18 @@ class OrderStateNotifier extends StateNotifier<OrderModel> {
   final Ref ref;
 
   OrderStateNotifier(this.ref)
-      : super(OrderModel(orderType: '', orderItemList: []));
+      : super(OrderModel(orderType: '', orderProductList: []));
 
   void order() {
+    Map<String, dynamic> json = state.toJson();
     ref.read(orderStatusProvider.notifier).addOrder(state);
+
     clearItems();
   }
 
   void addItem(OrderItemModel item) {
-    final existingIndex = state.orderItemList.indexWhere((e) => e.orderItemId == item.orderItemId);
-    final updatedList = [...state.orderItemList];
+    final existingIndex = state.orderProductList.indexWhere((e) => e.orderItemId == item.orderItemId);
+    final updatedList = [...state.orderProductList];
 
     if (existingIndex != -1) {
       // 기존 아이템 업데이트 + 삭제 + 맨 앞에 추가
@@ -31,26 +33,26 @@ class OrderStateNotifier extends StateNotifier<OrderModel> {
       updatedList.insert(0, item);
     }
 
-    state = state.copyWith(orderItemList: updatedList);
+    state = state.copyWith(orderProductList: updatedList);
   }
 
   void removeItem(int index) {
-    final newList = [...state.orderItemList]..removeAt(index);
-    state = state.copyWith(orderItemList: newList);
+    final newList = [...state.orderProductList]..removeAt(index);
+    state = state.copyWith(orderProductList: newList);
   }
 
   void clearItems() {
-    state = state.copyWith(orderItemList: []);
+    state = state.copyWith(orderProductList: []);
   }
 
   void updateOrderList(List<OrderItemModel> newList) {
-    state = state.copyWith(orderItemList: newList);
+    state = state.copyWith(orderProductList: newList);
   }
 
   void addItemOption(int orderItemIndex, {
     required ItemOptionModel item,
   }) {
-    final currentItem = state.orderItemList[orderItemIndex];
+    final currentItem = state.orderProductList[orderItemIndex];
     final currentOptions = currentItem.itemOptionList;
 
     final existingIndex = currentOptions.indexWhere((e) => e.optionId == item.optionId);
@@ -72,9 +74,9 @@ class OrderStateNotifier extends StateNotifier<OrderModel> {
     }
 
     final updatedItem = currentItem.copyWith(itemOptionList: updatedOptions);
-    final updatedItemList = [...state.orderItemList];
+    final updatedItemList = [...state.orderProductList];
     updatedItemList[orderItemIndex] = updatedItem;
 
-    state = state.copyWith(orderItemList: updatedItemList);
+    state = state.copyWith(orderProductList: updatedItemList);
   }
 }

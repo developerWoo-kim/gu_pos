@@ -27,10 +27,10 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
   void initState() {
     final state = ref.read(orderStatusProvider);
 
-    if(state.isNotEmpty) {
-      OrderModel? progressOrder = state.where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull;
-      OrderModel? completeOrder = state.where((order) => order.orderStatus == OrderStatus.COMPLETE).firstOrNull;
-      OrderModel? cancelOrder = state.where((order) => order.orderStatus == OrderStatus.CANCEL).firstOrNull;
+    if(state.value!.isNotEmpty) {
+      OrderModel? progressOrder = state.value!.where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull;
+      OrderModel? completeOrder = state.value!.where((order) => order.orderStatus == OrderStatus.COMPLETE).firstOrNull;
+      OrderModel? cancelOrder = state.value!.where((order) => order.orderStatus == OrderStatus.CANCEL).firstOrNull;
 
       if(cancelOrder != null) {
         selectedIndex = cancelOrder.orderIndex!;
@@ -52,20 +52,22 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
       print("선택된 탭 인덱스: ${_tabController.index}");
       setState(() {
         selectedTapIndex = _tabController.index;
+        final state = ref.read(orderStatusProvider).value;
+
         if(selectedTapIndex == 0 || selectedTapIndex == 1) {
-          OrderModel? progressOrder = ref.read(orderStatusProvider).where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull;
+          OrderModel? progressOrder = state!.where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull;
           if(progressOrder != null) {
             selectedIndex = progressOrder.orderIndex!;
           }
         }
         if(selectedTapIndex == 2) {
-          OrderModel? completeOrder = ref.read(orderStatusProvider).where((order) => order.orderStatus == OrderStatus.COMPLETE).firstOrNull;
+          OrderModel? completeOrder = state!.where((order) => order.orderStatus == OrderStatus.COMPLETE).firstOrNull;
           if(completeOrder != null) {
             selectedIndex = completeOrder.orderIndex!;
           }
         }
         if(selectedTapIndex == 3) {
-          OrderModel? cancelOrder = ref.read(orderStatusProvider).where((order) => order.orderStatus == OrderStatus.CANCEL).firstOrNull;
+          OrderModel? cancelOrder = state!.where((order) => order.orderStatus == OrderStatus.CANCEL).firstOrNull;
           if(cancelOrder != null) {
             selectedIndex = cancelOrder.orderIndex!;
           }
@@ -182,6 +184,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
 
   Widget _buildOrderStatusView() {
     final state = ref.watch(orderStatusProvider);
+
     return Expanded(
       child: Row(
         children: [
@@ -194,36 +197,73 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                     alignment: Alignment.center,
                     child: Padding(
                         padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
-                        child: state.isNotEmpty
-                          ? OrderStatusView(order: state.where((order) => order.orderIndex == selectedIndex).first)
-                          : const Center(child: Text('표시할 주문이 없어요'),)
+                        child: state.when(
+                            data: (orders) {
+                              if(orders.isNotEmpty) {
+                                return OrderStatusView(order: orders.where((order) => order.orderIndex == selectedIndex).first);
+                              }
+                              return const Text('표시할 주문이 없어요');
+                            },
+                            error: (e, _) => const Text('에러'),
+                            loading: () => const CircularProgressIndicator()
+                        ),
                     )
                 ),
                 Container(
                     alignment: Alignment.center,
                     child: Padding(
                         padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
-                        child: state.where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull != null
-                            ? OrderStatusView(order: state.where((order) => order.orderStatus == OrderStatus.PROGRESS).first)
-                            : const Center(child: Text('표시할 주문이 없어요'),)
+                        // child: state.where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull != null
+                        //     ? OrderStatusView(order: state.where((order) => order.orderStatus == OrderStatus.PROGRESS).first)
+                        //     : const Center(child: Text('표시할 주문이 없어요'),)
+                        child: state.when(
+                            data: (orders) {
+                              if(orders.where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull != null) {
+                                return OrderStatusView(order: orders.where((order) => order.orderStatus == OrderStatus.PROGRESS).first);
+                              }
+                              return const Text('표시할 주문이 없어요');
+                            },
+                            error: (e, _) => const Text('에러'),
+                            loading: () => const CircularProgressIndicator()
+                        ),
                     )
                 ),
                 Container(
                     alignment: Alignment.center,
                     child: Padding(
                         padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
-                        child: state.where((order) => order.orderStatus == OrderStatus.COMPLETE).firstOrNull != null
-                            ? OrderStatusView(order: state.where((order) => order.orderStatus == OrderStatus.COMPLETE).first)
-                            : const Center(child: Text('표시할 주문이 없어요'),)
+                        // child: state.where((order) => order.orderStatus == OrderStatus.COMPLETE).firstOrNull != null
+                        //     ? OrderStatusView(order: state.where((order) => order.orderStatus == OrderStatus.COMPLETE).first)
+                        //     : const Center(child: Text('표시할 주문이 없어요'),)
+                        child: state.when(
+                            data: (orders) {
+                              if(orders.where((order) => order.orderStatus == OrderStatus.COMPLETE).firstOrNull != null) {
+                                return OrderStatusView(order: orders.where((order) => order.orderStatus == OrderStatus.COMPLETE).first);
+                              }
+                              return const Text('표시할 주문이 없어요');
+                            },
+                            error: (e, _) => const Text('에러'),
+                            loading: () => const CircularProgressIndicator()
+                        ),
                     )
                 ),
                 Container(
                     alignment: Alignment.center,
                     child: Padding(
                         padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
-                        child: state.where((order) => order.orderStatus == OrderStatus.CANCEL).firstOrNull != null
-                            ? OrderStatusView(order: state.where((order) => order.orderStatus == OrderStatus.CANCEL).first)
-                            : const Center(child: Text('표시할 주문이 없어요'),)
+                        // child: state.where((order) => order.orderStatus == OrderStatus.CANCEL).firstOrNull != null
+                        //     ? OrderStatusView(order: state.where((order) => order.orderStatus == OrderStatus.CANCEL).first)
+                        //     : const Center(child: Text('표시할 주문이 없어요'),)
+                        child: state.when(
+                            data: (orders) {
+                              if(orders.where((order) => order.orderStatus == OrderStatus.CANCEL).firstOrNull != null) {
+                                return OrderStatusView(order: orders.where((order) => order.orderStatus == OrderStatus.CANCEL).first);
+                              }
+                              return const Text('표시할 주문이 없어요');
+                            },
+                            error: (e, _) => const Text('에러'),
+                            loading: () => const CircularProgressIndicator()
+                        ),
                     )
                 ),
               ],
@@ -280,7 +320,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
 
   Widget _buildProgress() {
     final state = ref.watch(orderStatusProvider);
-    List<OrderModel> orderList = state.where((order) => order.orderStatus == OrderStatus.PROGRESS).toList();
+    List<OrderModel> orderList = state.value!.where((order) => order.orderStatus == OrderStatus.PROGRESS).toList();
     orderList.sort((a, b) => a.orderIndex!.compareTo(b.orderIndex!));
     return Column(
       children: [
@@ -385,7 +425,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
     bool necessary = false
 }) {
     final state = ref.watch(orderStatusProvider);
-    List<OrderModel> orderList = state.where((order) => order.orderStatus == OrderStatus.COMPLETE).toList();
+    List<OrderModel> orderList = state.value!.where((order) => order.orderStatus == OrderStatus.COMPLETE).toList();
     orderList.sort((a, b) => a.orderIndex!.compareTo(b.orderIndex!));
 
     if(!necessary && orderList.isEmpty) {
@@ -494,7 +534,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
     bool necessary = false
 }) {
     final state = ref.watch(orderStatusProvider);
-    List<OrderModel> orderList = state.where((order) => order.orderStatus == OrderStatus.CANCEL).toList();
+    List<OrderModel> orderList = state.value!.where((order) => order.orderStatus == OrderStatus.CANCEL).toList();
     orderList.sort((a, b) => a.orderIndex!.compareTo(b.orderIndex!));
 
     if(!necessary && orderList.isEmpty) {

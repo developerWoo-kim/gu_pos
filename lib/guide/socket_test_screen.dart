@@ -32,7 +32,7 @@ class _SocketTestScreenState extends State<SocketTestScreen> {
   void _connectStomp() {
     stompClient = StompClient(
       config: StompConfig(
-        url: 'ws://4cc105307dd8.ngrok-free.app/ws-stomp',
+        url: 'ws://localhost:8080/ws-stomp',
         onConnect: _onStompConnected,
         onWebSocketError: (dynamic error) => print('🔴 WebSocket error: $error'),
         onStompError: (frame) => print('🔴 STOMP error: ${frame.body}'),
