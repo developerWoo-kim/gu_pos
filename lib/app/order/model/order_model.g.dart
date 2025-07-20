@@ -7,10 +7,10 @@ part of 'order_model.dart';
 // **************************************************************************
 
 OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => OrderModel(
-      orderIndex: (json['orderIndex'] as num?)?.toInt(),
+      orderId: (json['orderId'] as num?)?.toInt(),
       orderType: json['orderType'] as String,
       orderProductList: (json['orderProductList'] as List<dynamic>)
-          .map((e) => OrderItemModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => OrderProductModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       orderStatus:
           $enumDecodeNullable(_$OrderStatusEnumMap, json['orderStatus']),
@@ -20,7 +20,7 @@ OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => OrderModel(
 
 Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
     <String, dynamic>{
-      'orderIndex': instance.orderIndex,
+      'orderId': instance.orderId,
       'orderType': instance.orderType,
       'orderProductList': instance.orderProductList,
       'orderStatus': _$OrderStatusEnumMap[instance.orderStatus],

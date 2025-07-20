@@ -2,6 +2,7 @@ import 'package:custom_sliding_segmented_control/custom_sliding_segmented_contro
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gu_pos/app/order/model/order_product_option_model.dart';
 import 'package:gu_pos/app/product/component/product_grid_view.dart';
 import 'package:gu_pos/common/component/text/body_text.dart';
 
@@ -172,36 +173,6 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                               height: 150,
                               child: Column(
                                 children: [
-                                  // Row(
-                                  //   children: [
-                                  //     InkWell(
-                                  //       onTap: () {
-                                  //
-                                  //       },
-                                  //       child: Row(
-                                  //         children: [
-                                  //           Icon(Icons.edit_note, color: TEXT_COLOR_01, size: 24,),
-                                  //           SizedBox(width: 2,),
-                                  //           BodyText('편집모드', textSize: BodyTextSize.SMALL_HALF, fontWeight: FontWeight.w300, color: PRIMARY_COLOR_03,)
-                                  //         ],
-                                  //       ),
-                                  //     ),
-                                  //     SizedBox(width: 18,),
-                                  //     InkWell(
-                                  //       onTap: () {
-                                  //
-                                  //       },
-                                  //       child: Row(
-                                  //         children: [
-                                  //           Icon(Icons.add_circle, color: TEXT_COLOR_01, size: 20,),
-                                  //           SizedBox(width: 2,),
-                                  //           BodyText('상품추가', textSize: BodyTextSize.SMALL_HALF, fontWeight: FontWeight.w300, color: PRIMARY_COLOR_03,)
-                                  //         ],
-                                  //       ),
-                                  //     )
-                                  //   ],
-                                  // ),
-                                  // SizedBox(height: 30,),
                                   Row(
                                     children: [
                                       BodyText('옵션', textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500,),
@@ -218,7 +189,7 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                                               return InkWell(
                                                 onTap: () {
                                                   ref.read(orderProvider.notifier).addItemOption(selectedOrderItemIndex,
-                                                      item: ItemOptionModel(
+                                                      option: OrderProductOption(
                                                         optionId: index,
                                                         optionNm: '옵션_$index',
                                                         optionPrice: 500,
@@ -351,7 +322,7 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                           children: state.orderProductList.length == 0
                               ? List.empty()
                               : List.generate(state.orderProductList.length, (index) {
-                            final itemOptions = state.orderProductList[index].itemOptionList;
+                            final itemOptions = state.orderProductList[index].optionList;
                             final optionText = itemOptions
                                 .map((e) => '${e.optionNm} x${e.quantity}')
                                 .join(' / ');
@@ -418,7 +389,7 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  BodyText('${state.orderProductList[index].orderItemNm} x${state.orderProductList[index].quantity}', textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500, color: COLOR_505967,),
+                                                  BodyText('${state.orderProductList[index].productNm} x${state.orderProductList[index].quantity}', textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500, color: COLOR_505967,),
                                                   BodyText('4,500', textSize: BodyTextSize.REGULAR_HALF, color: COLOR_505967,)
                                                 ],
                                               ),

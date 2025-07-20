@@ -33,13 +33,13 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
       OrderModel? cancelOrder = state.value!.where((order) => order.orderStatus == OrderStatus.CANCEL).firstOrNull;
 
       if(cancelOrder != null) {
-        selectedIndex = cancelOrder.orderIndex!;
+        selectedIndex = cancelOrder.orderId!;
       }
       if(completeOrder != null) {
-        selectedIndex = completeOrder.orderIndex!;
+        selectedIndex = completeOrder.orderId!;
       }
       if(progressOrder != null) {
-        selectedIndex = progressOrder.orderIndex!;
+        selectedIndex = progressOrder.orderId!;
       }
     }
 
@@ -57,19 +57,19 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
         if(selectedTapIndex == 0 || selectedTapIndex == 1) {
           OrderModel? progressOrder = state!.where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull;
           if(progressOrder != null) {
-            selectedIndex = progressOrder.orderIndex!;
+            selectedIndex = progressOrder.orderId!;
           }
         }
         if(selectedTapIndex == 2) {
           OrderModel? completeOrder = state!.where((order) => order.orderStatus == OrderStatus.COMPLETE).firstOrNull;
           if(completeOrder != null) {
-            selectedIndex = completeOrder.orderIndex!;
+            selectedIndex = completeOrder.orderId!;
           }
         }
         if(selectedTapIndex == 3) {
           OrderModel? cancelOrder = state!.where((order) => order.orderStatus == OrderStatus.CANCEL).firstOrNull;
           if(cancelOrder != null) {
-            selectedIndex = cancelOrder.orderIndex!;
+            selectedIndex = cancelOrder.orderId!;
           }
         }
       });
@@ -200,7 +200,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                         child: state.when(
                             data: (orders) {
                               if(orders.isNotEmpty) {
-                                return OrderStatusView(order: orders.where((order) => order.orderIndex == selectedIndex).first);
+                                return OrderStatusView(order: orders.where((order) => order.orderId == selectedIndex).first);
                               }
                               return const Text('표시할 주문이 없어요');
                             },
@@ -321,7 +321,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
   Widget _buildProgress() {
     final state = ref.watch(orderStatusProvider);
     List<OrderModel> orderList = state.value!.where((order) => order.orderStatus == OrderStatus.PROGRESS).toList();
-    orderList.sort((a, b) => a.orderIndex!.compareTo(b.orderIndex!));
+    orderList.sort((a, b) => a.orderId!.compareTo(b.orderId!));
     return Column(
       children: [
         Container(
@@ -351,12 +351,12 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
             return InkWell(
               onTap: () {
                 setState(() {
-                  selectedIndex = orderList[index].orderIndex!;
+                  selectedIndex = orderList[index].orderId!;
                 });
               },
               child: Container(
                 decoration: BoxDecoration(
-                    color: selectedIndex == orderList[index].orderIndex ? COLOR_eaf3fe : PRIMARY_COLOR_04,
+                    color: selectedIndex == orderList[index].orderId ? COLOR_eaf3fe : PRIMARY_COLOR_04,
                     border: Border(
                         bottom: BorderSide(
                             color: COLOR_505967,
@@ -426,7 +426,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
 }) {
     final state = ref.watch(orderStatusProvider);
     List<OrderModel> orderList = state.value!.where((order) => order.orderStatus == OrderStatus.COMPLETE).toList();
-    orderList.sort((a, b) => a.orderIndex!.compareTo(b.orderIndex!));
+    orderList.sort((a, b) => a.orderId!.compareTo(b.orderId!));
 
     if(!necessary && orderList.isEmpty) {
       return Container();
@@ -460,12 +460,12 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                 return InkWell(
                   onTap: () {
                     setState(() {
-                      selectedIndex = orderList[index].orderIndex!;
+                      selectedIndex = orderList[index].orderId!;
                     });
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: selectedIndex == orderList[index].orderIndex ? COLOR_eaf3fe : PRIMARY_COLOR_04,
+                        color: selectedIndex == orderList[index].orderId ? COLOR_eaf3fe : PRIMARY_COLOR_04,
                         border: Border(
                             bottom: BorderSide(
                                 color: COLOR_505967,
@@ -535,7 +535,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
 }) {
     final state = ref.watch(orderStatusProvider);
     List<OrderModel> orderList = state.value!.where((order) => order.orderStatus == OrderStatus.CANCEL).toList();
-    orderList.sort((a, b) => a.orderIndex!.compareTo(b.orderIndex!));
+    orderList.sort((a, b) => a.orderId!.compareTo(b.orderId!));
 
     if(!necessary && orderList.isEmpty) {
       return Container();
@@ -569,12 +569,12 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                 return InkWell(
                   onTap: () {
                     setState(() {
-                      selectedIndex = orderList[index].orderIndex!;
+                      selectedIndex = orderList[index].orderId!;
                     });
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: selectedIndex == orderList[index].orderIndex ? COLOR_eaf3fe : PRIMARY_COLOR_04,
+                        color: selectedIndex == orderList[index].orderId ? COLOR_eaf3fe : PRIMARY_COLOR_04,
                         border: Border(
                             bottom: BorderSide(
                                 color: COLOR_505967,

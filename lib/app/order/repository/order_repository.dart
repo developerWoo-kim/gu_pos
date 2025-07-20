@@ -19,8 +19,8 @@ abstract class OrderRepository {
   factory OrderRepository(Dio dio, {String baseUrl})
   = _OrderRepository;
 
-  @GET('')
-  Future<List<OrderModel>> createOrder(@Body() Map<String, dynamic> json);
+  @POST('/create')
+  Future<OrderModel> createOrder(@Body() Map<String, dynamic> json);
 
   @GET('/list')
   Future<List<OrderModel>> getOrderList();

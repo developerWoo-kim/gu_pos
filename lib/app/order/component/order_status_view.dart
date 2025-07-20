@@ -141,7 +141,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               BodyText('승인상태', color: TEXT_COLOR_01, textSize: BodyTextSize.REGULAR_HALF),
-                              BodyText(widget.order.approvalStatus!.label, color: BODY_TEXT_COLOR_02, textSize: BodyTextSize.MEDIUM),
+                              BodyText('', color: BODY_TEXT_COLOR_02, textSize: BodyTextSize.MEDIUM),
                             ],
                           ),
                           const Spacer(),
@@ -206,7 +206,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                                         children: [
                                           Expanded(
                                             flex: 6,
-                                            child: BodyText(widget.order.orderProductList[index].orderItemNm, color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
+                                            child: BodyText(widget.order.orderProductList[index].productNm, color: TEXT_COLOR_05, textSize: BodyTextSize.MEDIUM),
                                           ),
                                           Expanded(
                                             flex: 4,
@@ -222,8 +222,8 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                                       ),
                                       SizedBox(height: 12,),
                                       Column(
-                                        children: List.generate(widget.order.orderProductList[index].itemOptionList.length, (optionIndex) {
-                                          final itemOption = widget.order.orderProductList[index].itemOptionList[optionIndex];
+                                        children: List.generate(widget.order.orderProductList[index].optionList.length, (optionIndex) {
+                                          final itemOption = widget.order.orderProductList[index].optionList[optionIndex];
                                           return Padding(
                                             padding: const EdgeInsets.only(bottom: 4),
                                             child: Row(
@@ -298,7 +298,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
   Widget _buildCompleteButton() {
     return InkWell(
       onTap: () {
-        ref.read(orderStatusProvider.notifier).completeOrder(widget.order.orderIndex!);
+        ref.read(orderStatusProvider.notifier).completeOrder(widget.order.orderId!);
       },
       child: BasicButton('완료',
           backgroundColor: PRIMARY_COLOR_03,
@@ -310,7 +310,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
   Widget _buildCompleteCancelButton() {
     return InkWell(
       onTap: () {
-        ref.read(orderStatusProvider.notifier).completeCancelOrder(widget.order.orderIndex!);
+        ref.read(orderStatusProvider.notifier).completeCancelOrder(widget.order.orderId!);
       },
       child: BasicButton('완료 취소',
           backgroundColor: TEXT_COLOR_04,

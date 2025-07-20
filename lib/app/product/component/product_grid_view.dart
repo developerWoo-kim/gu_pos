@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gu_pos/app/order/model/order_product_model.dart';
 import 'package:gu_pos/app/product/model/product_model.dart';
 
 import '../../../common/component/text/body_text.dart';
@@ -53,8 +54,8 @@ class _ProductGridViewState extends ConsumerState<ProductGridView> {
               return GridView.count(
                 crossAxisCount: columns,
                 childAspectRatio: itemWidth / itemHeight,
-                children: paddedItems.map((item) {
-                  if (item == null) {
+                children: paddedItems.map((product) {
+                  if (product == null) {
                     return Container(); // 빈칸
                   }
                   // return Container(
@@ -66,10 +67,11 @@ class _ProductGridViewState extends ConsumerState<ProductGridView> {
                   return InkWell(
                     onTap: () {
                       ref.read(orderProvider.notifier).addItem(
-                          OrderItemModel(
-                              orderItemId: '${item.productId}',
-                              orderItemNm: '${item.productNm}',
-                              price: item.productPrice,
+                          OrderProductModel(
+                              productId: product.productId,
+                              productNm: product.productNm,
+                              productPrice: product.productPrice,
+                              orderProductPrice: product.productPrice,
                               quantity: 1
                           )
                       );
@@ -94,13 +96,13 @@ class _ProductGridViewState extends ConsumerState<ProductGridView> {
                           children: [
                             Row(
                               children: [
-                                Expanded(child: BodyText('${item.productNm}', textSize: BodyTextSize.REGULAR,  color: PRIMARY_COLOR_04,))
+                                Expanded(child: BodyText('${product.productNm}', textSize: BodyTextSize.REGULAR,  color: PRIMARY_COLOR_04,))
                               ],
                             ),
                             const Spacer(),
                             Row(
                               children: [
-                                BodyText('${item.productPrice}', textSize: BodyTextSize.SMALL, color: PRIMARY_COLOR_04,)
+                                BodyText('${product.productPrice}', textSize: BodyTextSize.SMALL, color: PRIMARY_COLOR_04,)
                               ],
                             )
                           ],

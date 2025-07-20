@@ -1,4 +1,5 @@
 import 'package:gu_pos/app/order/component/order_status_view.dart';
+import 'package:gu_pos/app/order/model/order_product_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'order_item_model.dart';
@@ -7,14 +8,14 @@ part 'order_model.g.dart';
 
 @JsonSerializable()
 class OrderModel {
-  final int? orderIndex;
+  final int? orderId;
   final String orderType;
-  final List<OrderItemModel> orderProductList;
+  final List<OrderProductModel> orderProductList;
   final OrderStatus? orderStatus;
   final ApprovalStatus? approvalStatus;
 
   OrderModel({
-    this.orderIndex,
+    this.orderId,
     required this.orderType,
     required this.orderProductList,
     this.orderStatus,
@@ -22,14 +23,14 @@ class OrderModel {
   });
 
   OrderModel copyWith({
-    int? orderIndex,
+    int? orderId,
     String? orderType,
-    List<OrderItemModel>? orderProductList,
+    List<OrderProductModel>? orderProductList,
     OrderStatus? orderStatus,
     ApprovalStatus? approvalStatus,
   }) {
     return OrderModel(
-      orderIndex: orderIndex ?? this.orderIndex,
+      orderId: orderId ?? this.orderId,
       orderType: orderType ?? this.orderType,
       orderProductList: orderProductList ?? this.orderProductList,
       orderStatus: orderStatus ?? this.orderStatus,
@@ -38,14 +39,13 @@ class OrderModel {
   }
 
   int get totalPrice =>
-      orderProductList.fold(0, (sum, item) => sum + item.totalPrice);
+      orderProductList.fold(0, (sum, od) => sum + od.totalPrice);
 
   int get totalQuantity =>
-      orderProductList.fold(0, (sum, item) => sum + item.quantity);
+      orderProductList.fold(0, (sum, od) => sum + od.quantity);
 
   String get totalOrderItemNm =>
-      orderProductList.map((item) => '${item.orderItemNm} x${item.quantity}').join(', ');
-
+      orderProductList.map((od) => '${od.productNm} x${od.quantity}').join(', ');
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => _$OrderModelFromJson(json);
   Map<String, dynamic> toJson() => _$OrderModelToJson(this);

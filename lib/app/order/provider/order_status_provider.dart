@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gu_pos/app/order/model/order_model.dart';
 import 'package:gu_pos/app/order/repository/order_repository.dart';
+import 'package:gu_pos/app/order/repository/request/order_model_request.dart';
 
 final orderStatusProvider = AsyncNotifierProvider<OrderAsyncNotifier, List<OrderModel>>(() {
   return OrderAsyncNotifier();
@@ -35,7 +36,11 @@ class OrderAsyncNotifier extends AsyncNotifier<List<OrderModel>> {
   }
 
 
-  void addOrder(OrderModel model) {
+  void createOrder(OrderModel model) {
+    final order = model.copyWith(orderType: "DINE_IN");
+    final json = order.toCreateRequestJson("111");
+    repository.createOrder(json);
+    reload();
     // OrderModel order = model.copyWith(orderIndex: state.length + 1, orderStatus: OrderStatus.PROGRESS, approvalStatus: ApprovalStatus.COMPLETE);
     // final updated = List<OrderModel>.from(state)..add(order);
     // state = updated;
