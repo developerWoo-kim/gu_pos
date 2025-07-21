@@ -36,17 +36,19 @@ class OrderAsyncNotifier extends AsyncNotifier<List<OrderModel>> {
   }
 
 
-  void createOrder(OrderModel model) {
+  void createOrder(OrderModel model) async {
     final order = model.copyWith(orderType: "DINE_IN");
     final json = order.toCreateRequestJson("111");
-    repository.createOrder(json);
+    await repository.createOrder(json);
     reload();
     // OrderModel order = model.copyWith(orderIndex: state.length + 1, orderStatus: OrderStatus.PROGRESS, approvalStatus: ApprovalStatus.COMPLETE);
     // final updated = List<OrderModel>.from(state)..add(order);
     // state = updated;
   }
 
-  void completeOrder(int orderIndex) {
+  void complete(int orderId) async{
+    await repository.completeOrder(orderId: orderId);
+    reload();
     // final index = state.indexWhere((order) => order.orderIndex == orderIndex);
     // final updatedList = [...state];
     // final order = updatedList.removeAt(index);
@@ -57,7 +59,9 @@ class OrderAsyncNotifier extends AsyncNotifier<List<OrderModel>> {
     // state = updatedList;
   }
 
-  void completeCancelOrder(int orderIndex) {
+  void cancel(int orderId) async{
+    await repository.cancelOrder(orderId: orderId);
+    reload();
     // final index = state.indexWhere((order) => order.orderIndex == orderIndex);
     // final updatedList = [...state];
     // final order = updatedList.removeAt(index);

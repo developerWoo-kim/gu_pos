@@ -20,6 +20,7 @@ class OrderStatusScreen extends ConsumerStatefulWidget {
 
 class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with TickerProviderStateMixin {
   late TabController _tabController;
+  late PageController _pageController;
 
   int selectedIndex = 0;
   int selectedTapIndex = 0;
@@ -46,10 +47,14 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
     _tabController = TabController(
       length: 4,
       vsync: this,  //vsync에 this 형태로 전달해야 애니메이션이 정상 처리됨
+      initialIndex: selectedTapIndex
+    );
+
+    _pageController = PageController(
+      initialPage: selectedTapIndex,
     );
 
     _tabController.addListener(() {
-      print("선택된 탭 인덱스: ${_tabController.index}");
       setState(() {
         selectedTapIndex = _tabController.index;
         final state = ref.read(orderStatusProvider).value;
@@ -81,7 +86,15 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
   @override
   void dispose() {
     _tabController.dispose();
+    _pageController.dispose();
     super.dispose();
+  }
+
+  void _onTabTapped(int index) {
+    setState(() {
+      selectedTapIndex = index;
+    });
+    _pageController.jumpToPage(index);
   }
 
   @override
@@ -131,6 +144,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                                 labelColor: BODY_TEXT_COLOR_02,
                                 unselectedLabelColor: TEXT_COLOR_01,
                                 controller: _tabController,
+                                onTap: _onTabTapped,
                               ),
                             ),
                             Row(
@@ -189,8 +203,8 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
       child: Row(
         children: [
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
+            child: PageView(
+              controller: _pageController,
               physics: NeverScrollableScrollPhysics(), // 탭바에서 스크롤해도 옆으로 안넘어가는 설정
               children: [
                 Container(
@@ -219,7 +233,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                         child: state.when(
                             data: (orders) {
                               if(orders.where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull != null) {
-                                return OrderStatusView(order: orders.where((order) => order.orderStatus == OrderStatus.PROGRESS).first);
+                                return OrderStatusView(order: orders.where((order) => order.orderId == selectedIndex).first);
                               }
                               return const Text('표시할 주문이 없어요');
                             },
@@ -238,7 +252,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                         child: state.when(
                             data: (orders) {
                               if(orders.where((order) => order.orderStatus == OrderStatus.COMPLETE).firstOrNull != null) {
-                                return OrderStatusView(order: orders.where((order) => order.orderStatus == OrderStatus.COMPLETE).first);
+                                return OrderStatusView(order: orders.where((order) => order.orderId == selectedIndex).first);
                               }
                               return const Text('표시할 주문이 없어요');
                             },
@@ -257,7 +271,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                         child: state.when(
                             data: (orders) {
                               if(orders.where((order) => order.orderStatus == OrderStatus.CANCEL).firstOrNull != null) {
-                                return OrderStatusView(order: orders.where((order) => order.orderStatus == OrderStatus.CANCEL).first);
+                                return OrderStatusView(order: orders.where((order) => order.orderId == selectedIndex).first);
                               }
                               return const Text('표시할 주문이 없어요');
                             },

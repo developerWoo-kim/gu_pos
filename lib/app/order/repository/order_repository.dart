@@ -20,7 +20,13 @@ abstract class OrderRepository {
   = _OrderRepository;
 
   @POST('/create')
-  Future<OrderModel> createOrder(@Body() Map<String, dynamic> json);
+  Future<void> createOrder(@Body() Map<String, dynamic> json);
+
+  @PUT('/complete/{orderId}')
+  Future<void> completeOrder({@Path() required int orderId});
+
+  @PUT('/cancel/{orderId}')
+  Future<void> cancelOrder({@Path() required int orderId});
 
   @GET('/list')
   Future<List<OrderModel>> getOrderList();

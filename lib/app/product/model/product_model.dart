@@ -1,3 +1,4 @@
+import 'package:gu_pos/app/product/model/product_option_group_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'product_model.g.dart';
@@ -12,6 +13,8 @@ class ProductModel {
   final String stockAt;
   final int? stockCount;
 
+  final List<ProductOptionGroupModel>? optionGroupList;
+
   ProductModel({
     required this.productId,
     required this.productNm,
@@ -19,7 +22,8 @@ class ProductModel {
     required this.description,
     required this.productPrice,
     required this.stockAt,
-    this.stockCount
+    this.stockCount,
+    this.optionGroupList,
 });
 
   ProductModel copyWith({
@@ -30,6 +34,7 @@ class ProductModel {
     int? productPrice,
     String? stockAt,
     int? stockCount,
+    List<ProductOptionGroupModel>? optionGroupList,
   }) {
     return ProductModel(
       productId: productId ?? this.productId,
@@ -39,6 +44,7 @@ class ProductModel {
       productPrice: productPrice ?? this.productPrice,
       stockAt: stockAt ?? this.stockAt,
       stockCount: stockCount ?? this.stockCount,
+      optionGroupList: optionGroupList ?? this.optionGroupList,
     );
   }
 

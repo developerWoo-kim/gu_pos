@@ -68,89 +68,93 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
   }
 
   Widget _buildHeader() {
+    return Container(
+      height: 60,
+      color: PRIMARY_COLOR_03,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Icon(Icons.dehaze_sharp, color: PRIMARY_COLOR_04, size: 38),
+            Container(
+                child: Row(
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const OrderScreen(),
+                            ),
+                          );
+                        },
+                        child: BodyText('주문', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_04)
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                      child: VerticalDivider(
+                        width: 10,            // Divider가 차지하는 공간의 전체 너비
+                        thickness: 0.5,         // 선의 두께
+                        color: TEXT_COLOR_04,   // 선 색상
+                      ),
+                    ),
+                    _buildOrderStatus(),
+                  ],
+                )
+            ),
+            Container(
+              child: Row(
+                children: [
+                  BodyText('7.1(화) 오후 5:07', textSize: BodyTextSize.REGULAR, color: PRIMARY_COLOR_04, fontWeight: FontWeight.w300,)
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOrderStatus() {
     final state = ref.watch(orderStatusProvider);
     return state.when(
-      error: (e, _) => const Text('에러'),
       loading: () => const CircularProgressIndicator(),
+      error: (e, _) => const Text('에러'),
       data: (orders) {
-        return Container(
-          height: 60,
-          color: PRIMARY_COLOR_03,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Icon(Icons.dehaze_sharp, color: PRIMARY_COLOR_04, size: 38),
-                Container(
-                    child: Row(
-                      children: [
-                        InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => const OrderScreen(),
-                                ),
-                              );
-                            },
-                            child: BodyText('주문', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_04)
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                          child: VerticalDivider(
-                            width: 10,            // Divider가 차지하는 공간의 전체 너비
-                            thickness: 0.5,         // 선의 두께
-                            color: TEXT_COLOR_04,   // 선 색상
-                          ),
-                        ),
-                        InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => const OrderStatusScreen(),
-                                ),
-                              );
-                            },
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                BodyText('현황',
-                                    textSize: BodyTextSize.LARGE,
-                                    color: TEXT_COLOR_04
-                                ),
-                                if(state.value!.isNotEmpty)
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 6),
-                                    child: Container(
-                                      height: 22,
-                                      width: 22,
-                                      decoration: BoxDecoration(
-                                        color: PRIMARY_COLOR_01,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Center(
-                                        child: BodyText('${state.value!.length}', color: PRIMARY_COLOR_04, textSize: BodyTextSize.SMALL),
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            )
-                        )
-                      ],
-                    )
+        return InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const OrderStatusScreen(),
                 ),
-                Container(
-                  child: Row(
-                    children: [
-                      BodyText('7.1(화) 오후 5:07', textSize: BodyTextSize.REGULAR, color: PRIMARY_COLOR_04, fontWeight: FontWeight.w300,)
-                    ],
+              );
+            },
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                BodyText('현황',
+                    textSize: BodyTextSize.LARGE,
+                    color: TEXT_COLOR_04
+                ),
+                if(state.value!.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: Container(
+                      height: 22,
+                      width: 22,
+                      decoration: BoxDecoration(
+                        color: PRIMARY_COLOR_01,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: BodyText('${state.value!.length}', color: PRIMARY_COLOR_04, textSize: BodyTextSize.SMALL),
+                      ),
+                    ),
                   ),
-                )
               ],
-            ),
-          ),
+            )
         );
-      }
+      },
     );
   }
 }

@@ -298,7 +298,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
   Widget _buildCompleteButton() {
     return InkWell(
       onTap: () {
-        ref.read(orderStatusProvider.notifier).completeOrder(widget.order.orderId!);
+        ref.read(orderStatusProvider.notifier).complete(widget.order.orderId!);
       },
       child: BasicButton('완료',
           backgroundColor: PRIMARY_COLOR_03,
@@ -310,7 +310,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
   Widget _buildCompleteCancelButton() {
     return InkWell(
       onTap: () {
-        ref.read(orderStatusProvider.notifier).completeCancelOrder(widget.order.orderId!);
+        ref.read(orderStatusProvider.notifier).cancel(widget.order.orderId!);
       },
       child: BasicButton('완료 취소',
           backgroundColor: TEXT_COLOR_04,
