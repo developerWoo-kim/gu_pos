@@ -15,6 +15,8 @@ class OrderProductModel {
 
   final List<OrderProductOption> optionList;
 
+  final bool isSelected;
+
   OrderProductModel({
     this.orderProductId,
     required this.productId,
@@ -22,7 +24,8 @@ class OrderProductModel {
     required this.productPrice,
     required this.orderProductPrice,
     required this.quantity,
-    this.optionList = const []
+    this.optionList = const [],
+    this.isSelected = false,
   });
 
   OrderProductModel copyWith({
@@ -33,6 +36,7 @@ class OrderProductModel {
     int? orderProductPrice,
     int? quantity,
     List<OrderProductOption>? optionList,
+    bool? isSelected,
   }) {
     return OrderProductModel(
       orderProductId: orderProductId ?? this.orderProductId,
@@ -42,6 +46,7 @@ class OrderProductModel {
       orderProductPrice: orderProductPrice ?? this.orderProductPrice,
       quantity: quantity ?? this.quantity,
       optionList: optionList ?? this.optionList,
+      isSelected: isSelected ?? this.isSelected,
     );
   }
 

@@ -72,7 +72,7 @@ class _ProductGridViewState extends ConsumerState<ProductGridView> {
                               productNm: product.productNm,
                               productPrice: product.productPrice,
                               orderProductPrice: product.productPrice,
-                              quantity: 1
+                              quantity: 1,
                           )
                       );
                     },
@@ -183,57 +183,6 @@ class _ProductGridViewState extends ConsumerState<ProductGridView> {
               ),
             ),
           ],
-        ),
-        SizedBox(height: 20,),
-        Container(
-          height: 150,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  BodyText('옵션', textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500,),
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Expanded(
-                    child: Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: List.generate(3, (index) {
-                          return InkWell(
-                            onTap: () {
-                              // ref.read(orderProvider.notifier).addItemOption(selectedOrderItemIndex,
-                              //     option: OrderProductOption(
-                              //       optionId: index,
-                              //       optionNm: '옵션_$index',
-                              //       optionPrice: 500,
-                              //     )
-                              // );
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.12,
-                              height: 45,
-                              decoration: BoxDecoration(
-                                  color: BODY_TEXT_COLOR_01,
-                                  borderRadius: BorderRadius.circular(7)
-                              ),
-                              child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                                  child: Center(
-                                    child: BodyText('옵션_$index', textSize: BodyTextSize.SMALL),
-                                  )
-                              ),
-                            ),
-                          );
-                        })
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
         ),
       ],
     );
