@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gu_pos/app/order/model/order_product_model.dart';
 import 'package:gu_pos/app/order/model/order_product_option_model.dart';
 import 'package:gu_pos/app/order/provider/order_status_provider.dart';
+import 'package:gu_pos/app/product/model/product_model.dart';
+import 'package:gu_pos/app/product/provider/product_category_provider.dart';
 import '../../product/model/product_option_group_model.dart';
 import '../../product/provider/product_provider.dart';
 import '../model/order_model.dart';
@@ -80,7 +82,17 @@ class OrderStateNotifier extends StateNotifier<OrderModel> {
     final currentOptions = currentItem.optionList;
 
     // 1. 선택한 옵션이 속한 그룹 정보 찾기
-    final product = ref.read(productProvider).value?.where((p) => p.productId == productId,).firstOrNull;
+    // final product = ref.read(productProvider).value?.where((p) => p.productId == productId,).firstOrNull;
+    final categories = ref.read(productCategoryProvider).value ?? [];
+
+    ProductModel? product;
+    for (final category in categories) {
+      for (final pd in category.productList) {
+        if (pd.productId == productId) {
+          product = pd;
+        }
+      }
+    }
 
     if (product == null) return;
 

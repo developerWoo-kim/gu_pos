@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gu_pos/app/order/model/order_product_option_model.dart';
 import 'package:gu_pos/app/product/component/product_grid_view.dart';
+import 'package:gu_pos/app/product/provider/product_category_provider.dart';
 import 'package:gu_pos/common/component/text/body_text.dart';
 
 import '../../../common/component/button/basic_button.dart';
@@ -12,8 +13,6 @@ import '../../../common/const/colors.dart';
 import '../../../common/layout/default_layout.dart';
 import '../../../common/utils/format_util.dart';
 import '../../product/provider/product_provider.dart';
-import '../model/item_option_model.dart';
-import '../model/order_item_model.dart';
 import '../provider/order_provider.dart';
 
 class OrderScreen extends ConsumerStatefulWidget {
@@ -27,18 +26,25 @@ enum SegmentType { news, map, paper }
 enum TestType { segmentation, max, news }
 
 class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProviderStateMixin {
-  late TabController _tabController;
+  // late TabController _tabController;
+  late PageController _pageController;
 
   TestType initialTestType = TestType.max;
   int initial = 1;
   bool isPayment = false;
   int initialValue = 0;
 
+  int selectedTapIndex = 0;
+
   @override
   void initState() {
-    _tabController = TabController(
-      length: 2,
-      vsync: this,  //vsync에 this 형태로 전달해야 애니메이션이 정상 처리됨
+    // _tabController = TabController(
+    //   length: 2,
+    //   vsync: this,  //vsync에 this 형태로 전달해야 애니메이션이 정상 처리됨
+    // );
+
+    _pageController = PageController(
+      initialPage: selectedTapIndex,
     );
 
     super.initState();
@@ -46,13 +52,22 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
 
   @override
   void dispose() {
-    _tabController.dispose();
+    // _tabController.dispose();
+    _pageController.dispose();
     super.dispose();
+  }
+
+  void _onTabTapped(int index) {
+    setState(() {
+      selectedTapIndex = index;
+    });
+    _pageController.jumpToPage(index);
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(productProvider);
+    // final state = ref.watch(productProvider);
+    final state = ref.watch(productCategoryProvider);
     return DefaultLayout(
       body:  Expanded(
         child: Row(
@@ -60,7 +75,7 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
             state.when(
                 loading: () => const CircularProgressIndicator(),
                 error: (e, _) => const Text('에러'),
-                data: (products) {
+                data: (categories) {
                   return Expanded(
                     child: Container(
                       color: PRIMARY_COLOR_02,
@@ -85,10 +100,23 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                                     Container(
                                       width: 350,
                                       child: TabBar(
-                                        tabs: [
-                                          Container(height: 45, alignment: Alignment.center,child: const Text('즐겨찾는 메뉴', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
-                                          Container(height: 45, alignment: Alignment.center,child: const Text('기본', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
-                                        ],
+                                        tabs: List.generate(categories.length, (index) {
+                                          return Container(
+                                            height: 45,
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              '${categories[index].categoryNm}',
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w500),
+                                            )
+                                          );
+                                        }
+                                      ),
+                                        // tabs: [
+                                        //   Container(height: 45, alignment: Alignment.center,child: const Text('즐겨찾는 메뉴', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
+                                        //   Container(height: 45, alignment: Alignment.center,child: const Text('기본', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
+                                        // ],
                                         indicator: BoxDecoration(
                                             border: Border(
                                               bottom: BorderSide(
@@ -101,7 +129,8 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                                         indicatorSize: TabBarIndicatorSize.tab,
                                         labelColor: BODY_TEXT_COLOR_02,
                                         unselectedLabelColor: TEXT_COLOR_01,
-                                        controller: _tabController,
+                                        controller: TabController(length: categories.length, vsync: this, initialIndex: selectedTapIndex),
+                                        onTap: _onTabTapped,
                                       ),
                                     ),
                                     Row(
@@ -139,32 +168,17 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                               ),
                             ),
                             Expanded(
-                              child: TabBarView(
-                                controller: _tabController,
+                              child: PageView(
+                                controller: _pageController,
                                 physics: NeverScrollableScrollPhysics(), // 탭바에서 스크롤해도 옆으로 안넘어가는 설정
-                                children: [
-                                  state.when(
-                                      data: (products) {
-                                        return Padding(
-                                          padding: EdgeInsets.symmetric(vertical: 10),
-                                          child: Container(
-                                              child: ProductGridView(productList: products)
-                                          ),
-                                        );
-                                      },
-                                      error: (e, _) => const Text('에러'),
-                                      loading: () => const CircularProgressIndicator()
-                                  ),
-                                  Container(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      'Tab2 View',
-                                      style: TextStyle(
-                                        fontSize: 30,
-                                      ),
+                                children: List.generate(categories.length, (index) {
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    child: Container(
+                                        child: ProductGridView(productList: categories[index].productList)
                                     ),
-                                  )
-                                ],
+                                  );
+                                })
                               ),
                             ),
 
@@ -277,8 +291,13 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                                   ? List.empty()
                                   : List.generate(state.orderProductList.length, (index) {
                                 final itemOptions = state.orderProductList[index].optionList;
+
                                 final optionText = itemOptions
-                                    .map((e) => '${e.optionNm} x${e.quantity}')
+                                    .map((e) {
+                                      final optionPrice = e.optionPrice != 0 ? '(${e.optionPrice})' : '';
+
+                                      return '${e.optionNm}$optionPrice';
+                                    })
                                     .join(' / ');
 
                                 return MouseRegion(
@@ -342,7 +361,7 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
                                                       BodyText('${state.orderProductList[index].productNm} x${state.orderProductList[index].quantity}', textSize: BodyTextSize.REGULAR_HALF, fontWeight: FontWeight.w500, color: COLOR_505967,),
-                                                      BodyText('4,500', textSize: BodyTextSize.REGULAR_HALF, color: COLOR_505967,)
+                                                      BodyText('${FormatUtil.numberFormatter(state.orderProductList[index].totalPrice)}', textSize: BodyTextSize.REGULAR_HALF, color: COLOR_505967,)
                                                     ],
                                                   ),
                                                   SizedBox(height: 6,),
@@ -490,11 +509,8 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
         final state = ref.watch(orderProvider);
         final selectedOrderProduct = state.orderProductList.where((e) => e.isSelected).firstOrNull;
 
-        final productState = ref.watch(productProvider);
-        final productList = productState.value ?? [];
-
         final selectedProduct = selectedOrderProduct != null
-            ? productList.where((p) => p.productId == selectedOrderProduct.productId).firstOrNull
+            ? ref.read(productCategoryProvider.notifier).findSelectedProduct(selectedOrderProduct.productId)
             : null;
 
         if (selectedProduct == null) {

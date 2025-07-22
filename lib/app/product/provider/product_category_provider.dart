@@ -1,0 +1,49 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gu_pos/app/product/model/product_category_model.dart';
+import 'package:gu_pos/app/product/model/product_model.dart';
+import 'package:gu_pos/app/product/repository/product_category_repository.dart';
+
+final productCategoryProvider = AsyncNotifierProvider<ProductCategoryAsyncNotifier, List<ProductCategoryModel>>(() {
+  return ProductCategoryAsyncNotifier();
+});
+
+class ProductCategoryAsyncNotifier extends AsyncNotifier<List<ProductCategoryModel>> {
+  late final ProductCategoryRepository repository;
+
+  @override
+  Future<List<ProductCategoryModel>> build() async {
+    repository = ref.read(productCategoryRepositoryProvider);
+    return await _fetchCategoryList();
+  }
+
+  Future<List<ProductCategoryModel>> _fetchCategoryList() async {
+    try {
+      final categories = await repository.getCategoryListWithProducts();
+      return categories;
+    } catch (e, st) {
+      // 상태를 error로 설정
+      state = AsyncError(e, st);
+      return [];
+    }
+  }
+
+  // 필요 시 새로고침 기능 제공
+  Future<void> reload() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async => await _fetchCategoryList());
+  }
+
+  ProductModel? findSelectedProduct(int selectedProductId) {
+    final categoryList = state.value ?? [];
+
+    for (final category in categoryList) {
+      for (final product in category.productList) {
+        if (product.productId == selectedProductId) {
+          return product;
+        }
+      }
+    }
+
+    return null;
+  }
+}

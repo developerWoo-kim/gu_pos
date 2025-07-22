@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gu_pos/app/order/model/order_product_model.dart';
 import 'package:gu_pos/app/product/model/product_model.dart';
+import 'package:gu_pos/common/component/button/basic_button.dart';
 
+import '../../../common/component/form/basic_text_form_field.dart';
 import '../../../common/component/text/body_text.dart';
 import '../../../common/const/colors.dart';
 import '../../order/model/order_item_model.dart';
@@ -52,6 +54,8 @@ class _ProductGridViewState extends ConsumerState<ProductGridView> {
               final itemHeight = constraints.maxHeight / rows;
 
               return GridView.count(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
                 crossAxisCount: columns,
                 childAspectRatio: itemWidth / itemHeight,
                 children: paddedItems.map((product) {
@@ -137,7 +141,103 @@ class _ProductGridViewState extends ConsumerState<ProductGridView> {
                   SizedBox(width: 18,),
                   InkWell(
                     onTap: () {
-
+                      showDialog<String>(
+                          context: context,
+                          // barrierColor: Colors.cyan.withOpacity(0.4),
+                          barrierDismissible: true,
+                          builder: (context) {
+                            return Dialog(
+                              // /// 배경 컬러
+                              // backgroundColor: Colors.grey.shade100,
+                              // /// 그림자 컬러
+                              // shadowColor: Colors.blue,
+                              /// 다이얼로그의 모양 설정
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              /// z축 높이, elevation의 값이 높을 수록 그림자가 아래 위치하게 됩니다.
+                              // elevation: 10,
+                              // /// 다이얼로그의 위치 설정, 기본값은 center
+                              // alignment: Alignment.bottomCenter,
+                              child: Container(
+                                  width: 750,
+                                  height: 750,
+                                  decoration: BoxDecoration(
+                                    color: PRIMARY_COLOR_04,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 45, bottom: 50, left: 60, right: 20),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  BodyText("카테고리 관리", textSize: BodyTextSize.LARGE_HALF, fontWeight: FontWeight.w500,),
+                                                  Container(
+                                                    child: Row(
+                                                      children: [
+                                                        BodyText("삭제", textSize: BodyTextSize.MEDIUM,),
+                                                        BodyText("순서편집", textSize: BodyTextSize.MEDIUM,),
+                                                      ],
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              SizedBox(height: 40,),
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 8,
+                                                    child: BasicTextFormField(
+                                                      hintText: '새로운 카테고리 이름',
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 16,),
+                                                  Expanded(
+                                                      flex: 2,
+                                                      child: BasicButton('저장', backgroundColor: COLOR_eaf3fe, textColor: PRIMARY_COLOR_01)
+                                                  )
+                                                ],
+                                              ),
+                                              SizedBox(height: 16,),
+                                              Container(
+                                                child: ListView(
+                                                  children: _buildListWithDividers(
+                                                      paddedItems.map((products) {
+                                                        return Row(
+                                                          children: [
+                                                            Expanded(child: BodyText('${products?.productNm}', textSize: BodyTextSize.MEDIUM))
+                                                          ],
+                                                        );
+                                                      }).toList()
+                                                  )
+                                                )
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 25, bottom: 30, right: 26),
+                                        child: SizedBox(
+                                          width: 50,
+                                          child: Column(
+                                            children: [
+                                              Icon(Icons.close_rounded, color: TEXT_COLOR_01, size: 42,)
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                              ),
+                            );
+                          }
+                      );
                     },
                     child: Row(
                       children: [
@@ -186,5 +286,30 @@ class _ProductGridViewState extends ConsumerState<ProductGridView> {
         ),
       ],
     );
+  }
+
+  List<Widget> _buildListWithDividers(List<Widget> items) {
+    List<Widget> children = [];
+
+    // 첫 번째 Divider
+    children.add(Row(
+      children: [
+        Expanded(child: Divider(color: PRIMARY_COLOR_02)),
+      ],
+    ));
+
+    for (var item in items) {
+      // 아이템
+      children.add(item);
+
+      // 각 아이템 아래 Divider
+      children.add(Row(
+        children: [
+          Expanded(child: Divider(color: PRIMARY_COLOR_02)),
+        ],
+      ));
+    }
+
+    return children;
   }
 }

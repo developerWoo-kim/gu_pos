@@ -76,39 +76,51 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Icon(Icons.dehaze_sharp, color: PRIMARY_COLOR_04, size: 38),
-            Container(
-                child: Row(
-                  children: [
-                    InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const OrderScreen(),
-                            ),
-                          );
-                        },
-                        child: BodyText('주문', textSize: BodyTextSize.LARGE, color: PRIMARY_COLOR_04)
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                      child: VerticalDivider(
-                        width: 10,            // Divider가 차지하는 공간의 전체 너비
-                        thickness: 0.5,         // 선의 두께
-                        color: TEXT_COLOR_04,   // 선 색상
-                      ),
-                    ),
-                    _buildOrderStatus(),
-                  ],
-                )
+            // 왼쪽: 아이콘
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Icon(Icons.dehaze_sharp, color: PRIMARY_COLOR_04, size: 38),
+              ),
             ),
-            Container(
+
+            // 가운데: 주문 | 현황
+            Expanded(
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  BodyText('7.1(화) 오후 5:07', textSize: BodyTextSize.REGULAR, color: PRIMARY_COLOR_04, fontWeight: FontWeight.w300,)
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => const OrderScreen(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    },
+                    child: BodyText('주문', textSize: BodyTextSize.MEDIUM, color: PRIMARY_COLOR_04),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                    child: VerticalDivider(
+                      width: 10,
+                      thickness: 0.5,
+                      color: TEXT_COLOR_04,
+                    ),
+                  ),
+                  _buildOrderStatus(),
                 ],
               ),
-            )
+            ),
+
+            // 오른쪽: 날짜
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: BodyText('7.1(화) 오후 5:07', textSize: BodyTextSize.REGULAR, color: PRIMARY_COLOR_04, fontWeight: FontWeight.w300),
+              ),
+            ),
           ],
         ),
       ),
@@ -124,8 +136,10 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
         return InkWell(
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const OrderStatusScreen(),
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => const OrderStatusScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
                 ),
               );
             },
@@ -133,7 +147,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 BodyText('현황',
-                    textSize: BodyTextSize.LARGE,
+                    textSize: BodyTextSize.MEDIUM,
                     color: TEXT_COLOR_04
                 ),
                 if(state.value!.isNotEmpty)

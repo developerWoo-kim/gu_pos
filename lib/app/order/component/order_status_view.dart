@@ -228,7 +228,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                                             padding: const EdgeInsets.only(bottom: 4),
                                             child: Row(
                                               children: [
-                                                Expanded(child: BodyText('${itemOption.optionNm} (+${itemOption.optionPrice})',textSize: BodyTextSize.REGULAR_HALF, color: TEXT_COLOR_02,))
+                                                Expanded(child: BodyText('ㄴ ${itemOption.optionNm} (+${itemOption.optionPrice})',textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_02,))
                                               ],
                                             ),
                                           );
