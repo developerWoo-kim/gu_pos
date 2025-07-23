@@ -11,11 +11,14 @@ class BodyText extends StatelessWidget {
   Color? color;
   FontWeight? fontWeight;
   bool? numberFormat;
+  TextDecoration? decoration;
+
 
   BodyText(this.title,{
     required this.textSize,
     this.color,
     this.fontWeight,
+    this.decoration,
     super.key
   });
 
@@ -28,6 +31,8 @@ class BodyText extends StatelessWidget {
         fontSize: Platform.isIOS ? textSize.value + 1 : textSize.value,
         color: color ?? TEXT_COLOR_05,
         fontWeight: fontWeight ?? FontWeight.w400,
+        decoration: decoration ?? TextDecoration.none,
+        decorationColor: BODY_TEXT_COLOR_02,
       ),
     );
   }

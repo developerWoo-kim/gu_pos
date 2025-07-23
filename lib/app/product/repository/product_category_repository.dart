@@ -23,4 +23,7 @@ abstract class ProductCategoryRepository {
 
   @GET('/products/list')
   Future<List<ProductCategoryModel>> getCategoryListWithProducts();
+  
+  @PUT('/category-name')
+  Future<void> updateCategoryName(@Body() Map<String, dynamic> json);
 }

@@ -30,6 +30,8 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
   String? receivedMessage;
   late final Stream<String> _messageStream;
 
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     _orderSocketService.connect();
@@ -51,10 +53,13 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+      key: scaffoldKey,
       extendBody: true,
       backgroundColor: widget.backgroundColor ?? PRIMARY_COLOR_04,
       appBar: widget.appBar,
+      drawer: Drawer(),
       body: SizedBox.expand(
         child: Column(
           children: [
@@ -78,9 +83,14 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
           children: [
             // 왼쪽: 아이콘
             Expanded(
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Icon(Icons.dehaze_sharp, color: PRIMARY_COLOR_04, size: 38),
+              child: InkWell(
+                onTap: () {
+                  scaffoldKey.currentState!.openDrawer();
+                },
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Icon(Icons.dehaze_sharp, color: PRIMARY_COLOR_04, size: 38),
+                ),
               ),
             ),
 

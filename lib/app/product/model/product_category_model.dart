@@ -11,11 +11,14 @@ class ProductCategoryModel {
 
   final List<ProductModel> productList;
 
+  final bool isEditing;
+
   ProductCategoryModel({
     required this.categoryId,
     required this.categoryNm,
     required this.sortOrder,
-    required this.productList
+    required this.productList,
+    this.isEditing = false
   });
 
   ProductCategoryModel copyWith({
@@ -23,12 +26,14 @@ class ProductCategoryModel {
     String? categoryNm,
     int? sortOrder,
     List<ProductModel>? productList,
+    bool? isEditing,
   }) {
     return ProductCategoryModel(
       categoryId: categoryId ?? this.categoryId,
       categoryNm: categoryNm ?? this.categoryNm,
       sortOrder: sortOrder ?? this.sortOrder,
       productList: productList ?? this.productList,
+      isEditing: isEditing ?? this.isEditing,
     );
   }
 
