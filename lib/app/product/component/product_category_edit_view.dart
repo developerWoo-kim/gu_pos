@@ -16,6 +16,7 @@ class ProductCategoryEditView extends StatefulWidget {
 }
 
 class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
+  final _categoryNmController = TextEditingController();
   late PageController _pageController;
 
   @override
@@ -108,20 +109,19 @@ class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
                           flex: 8,
                           child: BasicTextFormField(
                             hintText: '새로운 카테고리 이름',
-                            initValue: _editCategoryNm,
+                            textEditingController: _categoryNmController,
                             onChanged: (value) {
                               _editCategoryNm = value;
                             },
                           ),
                         ),
-                        SizedBox(width: 16,),
+                        const SizedBox(width: 16,),
                         Expanded(
                             flex : 2,
                             child: InkWell(
                               onTap: () async {
-                                 final categoryNm = _editCategoryNm;
-                                 _editCategoryNm = "";
-                                await ref.read(productCategoryEditProvider.notifier).createCategory(categoryNm);
+                                await ref.read(productCategoryEditProvider.notifier).createCategory(_categoryNmController.text);
+                                _categoryNmController.clear();
                               },
                               child: BasicButtonV2(
                                 text: BodyText('저장',
@@ -226,7 +226,7 @@ class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
     );
   }
 
-  /// 카테고리 수정 뷰
+  /// 카테고리 삭제 뷰
   Widget _buildCategoriesDeleteView() {
     return Consumer(
         builder: (context, ref, child) {
@@ -269,14 +269,19 @@ class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
                                           const SizedBox(width: 16,),
                                           Expanded(
                                             flex : 2,
-                                            child: BasicButtonV2(
-                                              text: BodyText('삭제',
-                                                textSize: BodyTextSize.MEDIUM,
-                                                color: PRIMARY_COLOR_02,
+                                            child: InkWell(
+                                              onTap: () {
+                                                ref.read(productCategoryEditProvider.notifier).removeCategory(category.categoryId);
+                                              },
+                                              child: BasicButtonV2(
+                                                text: BodyText('삭제',
+                                                  textSize: BodyTextSize.MEDIUM,
+                                                  color: PRIMARY_COLOR_02,
+                                                ),
+                                                radius: BorderRadius.circular(15),
+                                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                                backgroundColor: COLOR_d23e41,
                                               ),
-                                              radius: BorderRadius.circular(15),
-                                              padding: const EdgeInsets.symmetric(vertical: 12),
-                                              backgroundColor: COLOR_d23e41,
                                             ),
                                           )
                                         ],
@@ -300,6 +305,7 @@ class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
     return Consumer(
         builder: (context, ref, child) {
           final state = ref.watch(productCategoryEditProvider);
+
           return state.when(
               error: (e, _) => const Text('오류'),
               loading: () => const CircularProgressIndicator(),
@@ -314,6 +320,8 @@ class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
                             children: [
                               InkWell(
                                 onTap: () {
+                                  _categoryId = 0;
+                                  ref.read(productCategoryEditProvider.notifier).refreshSortOrder();
                                   _onTabTapped(0);
                                 },
                                 child: const SizedBox(width: 35, height: 30, child: Icon(Icons.arrow_back_ios_new, color: TEXT_COLOR_04,)),
@@ -426,6 +434,9 @@ class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
                             children: [
                               InkWell(
                                 onTap: () {
+                                  _categoryId = 0;
+                                  ref.read(productCategoryEditProvider.notifier).refreshSortOrder();
+                                  _onTabTapped(0);
                                 },
                                 child: BasicButtonV2(
                                   text: BodyText("취소",
@@ -440,6 +451,7 @@ class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
                               const SizedBox(width: 8,),
                               InkWell(
                                 onTap: () {
+                                  ref.read(productCategoryEditProvider.notifier).updateCategorySortOrder();
                                 },
                                 child: BasicButtonV2(
                                   text: BodyText("저장",

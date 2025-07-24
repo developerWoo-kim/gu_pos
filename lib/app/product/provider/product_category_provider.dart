@@ -27,7 +27,7 @@ class ProductCategoryAsyncNotifier extends AsyncNotifier<List<ProductCategoryMod
     }
   }
 
-  // 필요 시 새로고침 기능 제공
+  /// 필요 시 새로고침 기능 제공
   Future<void> reload() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async => await _fetchCategoryList());
@@ -40,6 +40,15 @@ class ProductCategoryAsyncNotifier extends AsyncNotifier<List<ProductCategoryMod
     state = AsyncData(categoryList);
   }
 
+  /// 카테고리 삭제
+  Future<void> removeCategory(int categoryId) async {
+    final currentState = state.value;
+    if(currentState == null) return;
+    final index = currentState.indexWhere((e) => e.categoryId == categoryId);
+    final newList = [...currentState]..removeAt(index);
+    state = AsyncData(newList);
+  }
+
   /// 카테고리명 변경
   Future<void> changeCategoryName(int categoryId,{
     required String categoryNm
@@ -47,12 +56,17 @@ class ProductCategoryAsyncNotifier extends AsyncNotifier<List<ProductCategoryMod
     final categoryList = state.value ?? [];
     final index = categoryList.indexWhere((e) => e.categoryId == categoryId);
 
-
     final newCategory = categoryList[index].copyWith(categoryNm: categoryNm);
 
     categoryList[index] = newCategory;
 
     state = AsyncData(categoryList);
+  }
+
+  /// 카테고리 정렬 순서 리프레시
+  Future<void> refreshSortOrder(List<ProductCategoryModel> list) async {
+    final newList = list;
+    state = AsyncData(newList);
   }
 
   ProductModel? findSelectedProduct(int selectedProductId) {

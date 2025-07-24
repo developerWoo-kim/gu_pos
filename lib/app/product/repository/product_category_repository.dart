@@ -30,5 +30,11 @@ abstract class ProductCategoryRepository {
   @PUT('/category-name')
   Future<void> updateCategoryName(@Body() Map<String, dynamic> json);
 
+  @PUT('/sort-order')
+  Future<void> updateCategorySortOrder(@Body() Map<String, dynamic> json);
+
+  @DELETE('/{categoryId}')
+  Future<void> deleteCategoryId({@Path() required int categoryId});
+
 
 }

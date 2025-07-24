@@ -7,4 +7,12 @@ extension ProductCategoryMomelToRequestJson on ProductCategoryModel {
       'categoryNm': categoryNm,
     };
   }
+
+  Map<String, dynamic> toUpdateSortOrderJson(int index) {
+    return {
+      'categoryId': categoryId,
+      'sortOrder': index,
+    };
+  }
+
 }

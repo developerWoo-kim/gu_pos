@@ -78,6 +78,9 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                 loading: () => const CircularProgressIndicator(),
                 error: (e, _) => const Text('에러'),
                 data: (categories) {
+                  if(categories.length-1 < selectedTapIndex) {
+                    selectedTapIndex = categories.length - 1;
+                  }
                   return Expanded(
                     child: Container(
                       color: PRIMARY_COLOR_02,

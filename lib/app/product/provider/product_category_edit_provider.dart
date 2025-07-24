@@ -44,6 +44,19 @@ class ProductCategoryEditAsyncNotifier extends AutoDisposeAsyncNotifier<List<Pro
     ref.read(productCategoryProvider.notifier).addCategory(savedCategory);
   }
 
+  Future<void> removeCategory(int categoryId) async{
+    final currentState = state.value;
+    if (currentState == null) return;
+    final index = currentState.indexWhere((e) => e.categoryId == categoryId);
+
+    await repository.deleteCategoryId(categoryId: categoryId);
+
+    final newList = [...currentState]..removeAt(index);
+    state = AsyncData(newList);
+
+    ref.read(productCategoryProvider.notifier).removeCategory(categoryId);
+  }
+
   Future<void> editing(int categoryId) async {
     final currentState = state.value;
     if (currentState == null) return;
@@ -75,6 +88,22 @@ class ProductCategoryEditAsyncNotifier extends AutoDisposeAsyncNotifier<List<Pro
     state = AsyncData(newList);
   }
 
+  Future<void> updateCategorySortOrder() async {
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    Map<String, dynamic> json = {
+      'categorySortOrderList': List.generate(currentState.length, (index) {
+        final item = currentState[index];
+        return item.toUpdateSortOrderJson(index+1);
+      })
+    };
+
+    await repository.updateCategorySortOrder(json);
+
+    ref.read(productCategoryProvider.notifier).refreshSortOrder(currentState);
+  }
+
   Future<void> moveUp(int categoryId) async {
     final currentState = state.value;
     if (currentState == null) return;
@@ -104,6 +133,21 @@ class ProductCategoryEditAsyncNotifier extends AutoDisposeAsyncNotifier<List<Pro
     final temp = newList[index + 1];
     newList[index + 1] = newList[index];
     newList[index] = temp;
+
+    state = AsyncData(newList);
+
+    // repository에도 변경 순서 반영
+    // await repository.updateCategoryOrder(newList);
+  }
+
+  Future<void> refreshSortOrder() async {
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    final categoryState = ref.read(productCategoryProvider).value;
+    if (categoryState == null) return;
+
+    final newList = categoryState;
 
     state = AsyncData(newList);
 

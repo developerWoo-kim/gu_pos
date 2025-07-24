@@ -11,6 +11,7 @@ class BasicTextFormField extends StatelessWidget {
   final String? labelText;
   final bool obscureText;
   final bool autofocus;
+  final TextEditingController? textEditingController;
   final ValueChanged<String>? onChanged; // 값이 바뀔때 마다 실행되는 콜백
   final VoidCallback? onEditingComplete;
   final ValueChanged? onSubmitted;
@@ -26,6 +27,7 @@ class BasicTextFormField extends StatelessWidget {
       this.labelText,
       this.obscureText = false,
       this.autofocus = false,
+      this.textEditingController,
       this.onChanged,
       this.onEditingComplete,
       this.onSubmitted,
@@ -56,6 +58,7 @@ class BasicTextFormField extends StatelessWidget {
       obscureText: obscureText,
       // 화면에 텍스트 폼 필드가 들어왔을때 포커스 되느냐하는 속성 - 파라미터
       textInputAction: TextInputAction.done,
+      controller: textEditingController,
       autofocus: autofocus,
       // 값이 바뀔때마다 실행되는 콜백 - 파라미터
       onChanged: onChanged,
