@@ -138,7 +138,7 @@ class _ProductGridViewState extends ConsumerState<ProductGridView> {
                   InkWell(
                     onTap: () {
                       DialogUtil.basicLayout(context,
-                          content: ProductCategoryEditView()
+                          content: const ProductCategoryEditView()
                       );
                     },
                     child: Row(

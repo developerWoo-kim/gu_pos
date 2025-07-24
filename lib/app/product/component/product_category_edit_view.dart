@@ -26,11 +26,18 @@ class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void _onTabTapped(int index) {
     _pageController.jumpToPage(index);
   }
 
   int _categoryId = 0;
+
+  String _editCategoryNm = "";
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +59,8 @@ class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
     return Consumer(
         builder: (context, ref, child) {
           final state = ref.watch(productCategoryEditProvider);
+          final buffer = ref.watch(categoryEditBufferProvider);
+
           return state.when(
               error: (e, _) => const Text('오류'),
               loading: () => const CircularProgressIndicator(),
@@ -99,14 +108,20 @@ class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
                           flex: 8,
                           child: BasicTextFormField(
                             hintText: '새로운 카테고리 이름',
+                            initValue: _editCategoryNm,
+                            onChanged: (value) {
+                              _editCategoryNm = value;
+                            },
                           ),
                         ),
                         SizedBox(width: 16,),
                         Expanded(
                             flex : 2,
                             child: InkWell(
-                              onTap: () {
-
+                              onTap: () async {
+                                 final categoryNm = _editCategoryNm;
+                                 _editCategoryNm = "";
+                                await ref.read(productCategoryEditProvider.notifier).createCategory(categoryNm);
                               },
                               child: BasicButtonV2(
                                 text: BodyText('저장',
@@ -137,7 +152,19 @@ class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
                                         children: [
                                           Expanded(
                                               flex : 8,
-                                              child: BodyText(category.categoryNm, textSize: BodyTextSize.LARGE, fontWeight: FontWeight.w500,)
+                                              child: isEditing
+                                                  ? BasicTextFormField(
+                                                      initValue: category.categoryNm,
+                                                      onChanged: (value) {
+                                                        final list = [...ref.read(categoryEditBufferProvider)];
+                                                        final index = list.indexWhere((e) => e.categoryId == category.categoryId);
+                                                        if (index != -1) {
+                                                          list[index] = list[index].copyWith(categoryNm: value);
+                                                          ref.read(categoryEditBufferProvider.notifier).state = list;
+                                                        }
+                                                      },
+                                                    )
+                                                  : BodyText(category.categoryNm, textSize: BodyTextSize.LARGE, fontWeight: FontWeight.w500,),
                                           ),
                                           const SizedBox(width: 16,),
                                           Expanded(
@@ -145,12 +172,12 @@ class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
                                             child: isEditing
                                                 ? InkWell(
                                                   onTap: () {
-                                                    final notifier = ref.read(productCategoryEditProvider.notifier);
-                                                    if (isEditing) {
-                                                      // TODO: 실제 저장 처리 수행
-                                                    } else {
+                                                    final bufferList = ref.read(categoryEditBufferProvider);
+                                                    final bufferItem = bufferList.where((e) => e.categoryId == category.categoryId).firstOrNull;
+                                                    if (bufferItem == null) return;
 
-                                                    }
+                                                    ref.read(productCategoryEditProvider.notifier)
+                                                        .updateCategoryName(category.categoryId, categoryNm: bufferItem.categoryNm);
                                                   },
                                                   child: BasicButtonV2(
                                                       text: BodyText('저장',
@@ -162,15 +189,26 @@ class _ProductCategoryEditViewState extends State<ProductCategoryEditView> {
                                                       backgroundColor: COLOR_eaf3fe,
                                                     ),
                                                 )
-                                                : BasicButtonV2(
-                                                    text: BodyText('수정',
-                                                      textSize: BodyTextSize.MEDIUM,
-                                                      color: TEXT_COLOR_01,
+                                                : InkWell(
+                                                    onTap: () {
+                                                      ref.read(productCategoryEditProvider.notifier).editing(category.categoryId);
+                                                      if (buffer.isEmpty) {
+                                                        final originalList = categories;
+
+                                                        ref.read(categoryEditBufferProvider.notifier).state =
+                                                            originalList.map((e) => e.copyWith()).toList();
+                                                      }
+                                                    },
+                                                    child: BasicButtonV2(
+                                                      text: BodyText('수정',
+                                                        textSize: BodyTextSize.MEDIUM,
+                                                        color: TEXT_COLOR_01,
+                                                      ),
+                                                      radius: BorderRadius.circular(15),
+                                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                                      backgroundColor: COLOR_f3f4f6,
                                                     ),
-                                                    radius: BorderRadius.circular(15),
-                                                    padding: const EdgeInsets.symmetric(vertical: 12),
-                                                    backgroundColor: COLOR_f3f4f6,
-                                                  )
+                                                )
                                           )
                                         ],
                                       ),

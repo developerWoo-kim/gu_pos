@@ -11,7 +11,9 @@ import '../../../common/component/button/basic_button.dart';
 import '../../../common/component/button/number_stepper.dart';
 import '../../../common/const/colors.dart';
 import '../../../common/layout/default_layout.dart';
+import '../../../common/utils/dialog/dialog_util.dart';
 import '../../../common/utils/format_util.dart';
+import '../../product/component/product_category_edit_view.dart';
 import '../../product/provider/product_provider.dart';
 import '../provider/order_provider.dart';
 
@@ -94,21 +96,22 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                                     )
                                 ),
                                 child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      width: 350,
+                                    Expanded(
                                       child: TabBar(
+                                        isScrollable: true,
+                                        tabAlignment: TabAlignment.start,
                                         tabs: List.generate(categories.length, (index) {
                                           return Container(
                                             height: 45,
                                             alignment: Alignment.center,
                                             child: Text(
-                                              '${categories[index].categoryNm}',
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500),
+                                              categories[index].categoryNm,
+                                              style: const TextStyle(
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w500
+                                              ),
                                             )
                                           );
                                         }
@@ -133,19 +136,42 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                                         onTap: _onTabTapped,
                                       ),
                                     ),
+                                    const SizedBox(width: 10,),
                                     Row(
                                       children: [
+                                        InkWell(
+                                          onTap: () {
+                                            DialogUtil.basicLayout(context,
+                                                content: const ProductCategoryEditView()
+                                            );
+                                          },
+                                          child: Container(
+                                            height: 40,
+                                            width: 40,
+                                            decoration: BoxDecoration(
+                                              color: COLOR_f3f4f6,
+                                              borderRadius: BorderRadius.circular(7)
+                                            ),
+                                            child: const Padding(
+                                                padding: EdgeInsets.symmetric(horizontal: 5,),
+                                                child: Center(
+                                                    child: Icon(Icons.add, size: 28, color: TEXT_COLOR_02,)
+                                                )
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10,),
                                         Container(
                                           height: 40,
                                           width: 40,
                                           decoration: BoxDecoration(
-                                              color: BODY_TEXT_COLOR_01,
+                                              color: COLOR_f3f4f6,
                                               borderRadius: BorderRadius.circular(7)
                                           ),
-                                          child: Padding(
+                                          child: const Padding(
                                               padding: EdgeInsets.symmetric(horizontal: 5,),
                                               child: Center(
-                                                  child: Icon(Icons.search, size: 28,)
+                                                  child: Icon(Icons.search, size: 28, color: TEXT_COLOR_02,)
                                               )
                                           ),
                                         ),
@@ -170,7 +196,7 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                             Expanded(
                               child: PageView(
                                 controller: _pageController,
-                                physics: NeverScrollableScrollPhysics(), // 탭바에서 스크롤해도 옆으로 안넘어가는 설정
+                                physics: const NeverScrollableScrollPhysics(), // 탭바에서 스크롤해도 옆으로 안넘어가는 설정
                                 children: List.generate(categories.length, (index) {
                                   return Padding(
                                     padding: EdgeInsets.symmetric(vertical: 10),
@@ -514,7 +540,9 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
             : null;
 
         if (selectedProduct == null) {
-          return const SizedBox.shrink();
+          return const SizedBox(
+            height: 150,
+          );
         }
 
         final allOptions = selectedProduct.optionGroupList!

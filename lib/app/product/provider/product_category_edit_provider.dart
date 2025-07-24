@@ -1,15 +1,19 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gu_pos/app/product/provider/product_category_provider.dart';
+import 'package:gu_pos/app/product/repository/request/product_category_model_request.dart';
 
 import '../model/product_category_model.dart';
 import '../repository/product_category_repository.dart';
 
-final productCategoryEditProvider = AsyncNotifierProvider<ProductCategoryEditAsyncNotifier, List<ProductCategoryModel>>(() {
-  return ProductCategoryEditAsyncNotifier();
-});
+final productCategoryEditProvider = AsyncNotifierProvider.autoDispose<ProductCategoryEditAsyncNotifier, List<ProductCategoryModel>>(() =>
+    ProductCategoryEditAsyncNotifier()
+);
 
-class ProductCategoryEditAsyncNotifier extends AsyncNotifier<List<ProductCategoryModel>> {
+final categoryEditBufferProvider = StateProvider.autoDispose<List<ProductCategoryModel>>((ref) => []);
+
+class ProductCategoryEditAsyncNotifier extends AutoDisposeAsyncNotifier<List<ProductCategoryModel>> {
   late final ProductCategoryRepository repository;
 
   @override
@@ -20,13 +24,55 @@ class ProductCategoryEditAsyncNotifier extends AsyncNotifier<List<ProductCategor
 
   Future<List<ProductCategoryModel>> _fetchCategoryList() async {
     try {
-      final categories = await repository.getCategoryListWithProducts();
-      return categories;
+      final categoryList = ref.read(productCategoryProvider).value ?? [];
+      final editList = [...categoryList];
+      return editList;
     } catch (e, st) {
       // 상태를 error로 설정
       state = AsyncError(e, st);
       return [];
     }
+  }
+
+  Future<void> createCategory(String categoryNm) async{
+    final savedCategory = await repository.createCategory(categoryNm: categoryNm);
+
+    final currentState = state.value ?? [];
+    currentState.add(savedCategory);
+    state = AsyncData(currentState);
+
+    ref.read(productCategoryProvider.notifier).addCategory(savedCategory);
+  }
+
+  Future<void> editing(int categoryId) async {
+    final currentState = state.value;
+    if (currentState == null) return;
+    final index = currentState.indexWhere((e) => e.categoryId == categoryId);
+
+    final newList = [...currentState];
+    newList[index] = newList[index].copyWith(isEditing: true);
+
+    state = AsyncData(newList);
+  }
+
+  Future<void> updateCategoryName(int categoryId,{
+    required String categoryNm
+  }) async {
+    final currentState = state.value;
+    if (currentState == null) return;
+    final index = currentState.indexWhere((e) => e.categoryId == categoryId);
+
+    final newList = [...currentState];
+
+    final newCategory = newList[index].copyWith(categoryNm: categoryNm, isEditing: false);
+    newList[index] = newCategory;
+
+    final json = newCategory.toUpdateRequestJson();
+    await repository.updateCategoryName(json);
+
+    ref.read(productCategoryProvider.notifier).changeCategoryName(categoryId, categoryNm: categoryNm);
+
+    state = AsyncData(newList);
   }
 
   Future<void> moveUp(int categoryId) async {

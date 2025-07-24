@@ -33,6 +33,28 @@ class ProductCategoryAsyncNotifier extends AsyncNotifier<List<ProductCategoryMod
     state = await AsyncValue.guard(() async => await _fetchCategoryList());
   }
 
+  /// 카테고리 추가
+  Future<void> addCategory(ProductCategoryModel category) async {
+    final categoryList = state.value ?? [];
+    categoryList.add(category);
+    state = AsyncData(categoryList);
+  }
+
+  /// 카테고리명 변경
+  Future<void> changeCategoryName(int categoryId,{
+    required String categoryNm
+  }) async {
+    final categoryList = state.value ?? [];
+    final index = categoryList.indexWhere((e) => e.categoryId == categoryId);
+
+
+    final newCategory = categoryList[index].copyWith(categoryNm: categoryNm);
+
+    categoryList[index] = newCategory;
+
+    state = AsyncData(categoryList);
+  }
+
   ProductModel? findSelectedProduct(int selectedProductId) {
     final categoryList = state.value ?? [];
 
