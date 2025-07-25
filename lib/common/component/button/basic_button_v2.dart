@@ -21,14 +21,13 @@ class BasicButtonV2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: radius ?? BorderRadius.circular(5),
-        ),
+    return Material(
+        color: backgroundColor,
+        borderRadius: radius ?? BorderRadius.circular(5),
         child: Padding(
           padding: padding ?? const EdgeInsets.symmetric(horizontal: 18.0, vertical: 10.0),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if(icon != null)

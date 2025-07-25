@@ -3,6 +3,7 @@ import 'dart:ui';
 
 /// 주 색상
 const PRIMARY_COLOR_01 = Color(0xFF4980ee);
+const COLOR_d0e1fd = Color(0xFFd0e1fd);
 const COLOR_eaf3fe = Color(0xFFeaf3fe);
 
 
@@ -47,7 +48,9 @@ const TEXT_COLOR_05 = Color(0xFF353d4a);
 
 const COLOR_505967 = Color(0xFF505967);
 const COLOR_f3f4f6 = Color(0xFFf3f4f6);
+const COLOR_e6e8ea = Color(0xFFe6e8ea);
 const COLOR_6e7784 = Color(0xFF6e7784);
+
 
 
 const COLOR_d23e41 = Color(0xFFea2b41);

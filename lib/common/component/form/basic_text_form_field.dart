@@ -17,6 +17,7 @@ class BasicTextFormField extends StatelessWidget {
   final ValueChanged? onSubmitted;
   final Function? validator;
   final Icon? prefixIcon;
+  final Widget? suffixWidget;
   final List<TextInputFormatter>? inputFormatters;
   final FocusNode? focusNode;
 
@@ -33,6 +34,7 @@ class BasicTextFormField extends StatelessWidget {
       this.onSubmitted,
       this.validator,
       this.prefixIcon,
+      this.suffixWidget,
       this.inputFormatters,
       this.focusNode});
 
@@ -89,6 +91,10 @@ class BasicTextFormField extends StatelessWidget {
         border: baseBorder,
         enabledBorder: baseBorder,
         prefixIcon: prefixIcon,
+        suffixIconConstraints: const BoxConstraints(
+          minHeight: 1,
+        ),
+        suffixIcon: suffixWidget,
         // 선택된 Input border
         focusedBorder: baseBorder.copyWith(
             borderSide: baseBorder.borderSide.copyWith(
@@ -96,6 +102,7 @@ class BasicTextFormField extends StatelessWidget {
             )
         ),
       ),
+
       validator: (value) {
         String? errorMessage = validator?.call(value);
         return errorMessage;

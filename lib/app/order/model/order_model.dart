@@ -2,8 +2,6 @@ import 'package:gu_pos/app/order/component/order_status_view.dart';
 import 'package:gu_pos/app/order/model/order_product_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'order_item_model.dart';
-
 part 'order_model.g.dart';
 
 @JsonSerializable()

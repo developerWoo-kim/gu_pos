@@ -12,13 +12,15 @@ class ProductCategoryModel {
   final List<ProductModel> productList;
 
   final bool isEditing;
+  final bool isSelected;
 
   ProductCategoryModel({
-    required this.categoryId,
-    required this.categoryNm,
-    required this.sortOrder,
-    required this.productList,
-    this.isEditing = false
+      required this.categoryId,
+      required this.categoryNm,
+      required this.sortOrder,
+      required this.productList,
+      this.isEditing = false,
+      this.isSelected = false,
   });
 
   ProductCategoryModel copyWith({
@@ -27,13 +29,15 @@ class ProductCategoryModel {
     int? sortOrder,
     List<ProductModel>? productList,
     bool? isEditing,
+    bool? isSelected,
   }) {
     return ProductCategoryModel(
-      categoryId: categoryId ?? this.categoryId,
-      categoryNm: categoryNm ?? this.categoryNm,
-      sortOrder: sortOrder ?? this.sortOrder,
-      productList: productList ?? this.productList,
-      isEditing: isEditing ?? this.isEditing,
+        categoryId: categoryId ?? this.categoryId,
+        categoryNm: categoryNm ?? this.categoryNm,
+        sortOrder: sortOrder ?? this.sortOrder,
+        productList: productList ?? this.productList,
+        isEditing: isEditing ?? this.isEditing,
+        isSelected: isSelected ?? this.isSelected,
     );
   }
 

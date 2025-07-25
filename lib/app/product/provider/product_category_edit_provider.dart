@@ -155,4 +155,23 @@ class ProductCategoryEditAsyncNotifier extends AutoDisposeAsyncNotifier<List<Pro
     // await repository.updateCategoryOrder(newList);
   }
 
+  /// 카테고리 선택
+  Future<void> select(int categoryId) async {
+    final categoryList = state.value ?? [];
+
+    final index = categoryList.indexWhere((e) => e.categoryId == categoryId);
+
+    if(categoryList[index].isSelected) {
+      return;
+    }
+
+    final newCategory = categoryList[index].copyWith(isSelected: true);
+
+    final newList = categoryList.map((e) => e.isSelected ? e.copyWith(isSelected: false) : e).toList();
+
+    newList[index] = newCategory;
+
+    state = AsyncData(newList);
+  }
+
 }

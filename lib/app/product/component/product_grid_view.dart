@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gu_pos/app/order/model/order_product_model.dart';
 import 'package:gu_pos/app/product/component/product_category_edit_view.dart';
+import 'package:gu_pos/app/product/component/product_edit_view.dart';
 import 'package:gu_pos/app/product/model/product_model.dart';
 import 'package:gu_pos/common/utils/dialog/dialog_util.dart';
 import '../../../common/component/text/body_text.dart';
@@ -138,7 +139,7 @@ class _ProductGridViewState extends ConsumerState<ProductGridView> {
                   InkWell(
                     onTap: () {
                       DialogUtil.basicLayout(context,
-                          content: const ProductCategoryEditView()
+                          content: const ProductEditView()
                       );
                     },
                     child: Row(

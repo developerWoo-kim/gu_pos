@@ -14,6 +14,7 @@ import '../../../common/layout/default_layout.dart';
 import '../../../common/utils/dialog/dialog_util.dart';
 import '../../../common/utils/format_util.dart';
 import '../../product/component/product_category_edit_view.dart';
+import '../../product/provider/product_option_group_provider.dart';
 import '../../product/provider/product_provider.dart';
 import '../provider/order_provider.dart';
 
@@ -538,17 +539,21 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
         final state = ref.watch(orderProvider);
         final selectedOrderProduct = state.orderProductList.where((e) => e.isSelected).firstOrNull;
 
-        final selectedProduct = selectedOrderProduct != null
-            ? ref.read(productCategoryProvider.notifier).findSelectedProduct(selectedOrderProduct.productId)
-            : null;
-
-        if (selectedProduct == null) {
+        if (selectedOrderProduct == null) {
           return const SizedBox(
             height: 150,
           );
         }
 
-        final allOptions = selectedProduct.optionGroupList!
+        final optionGroupState = ref.watch(productOptionGroupProvider).value;
+
+        if ((optionGroupState ?? []).isEmpty) {
+          return const SizedBox(
+            height: 150,
+          );
+        }
+
+        final allOptions = optionGroupState!
             .expand((group) => group.optionList)
             .toList();
 
@@ -572,7 +577,7 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                           final option = allOptions[index];
                           return InkWell(
                             onTap: () {
-                              ref.read(orderProvider.notifier).addItemOption(selectedProduct.productId,
+                              ref.read(orderProvider.notifier).addItemOption(selectedOrderProduct.productId,
                                   option: OrderProductOption(
                                     optionId: option.productOptionId,
                                     optionNm: option.productOptionNm,

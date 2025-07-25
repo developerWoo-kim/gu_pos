@@ -6,6 +6,7 @@ import 'package:gu_pos/app/product/model/product_model.dart';
 import 'package:retrofit/retrofit.dart';
 import '../../../common/const/data.dart';
 import '../../../common/dio/dio.dart';
+import '../model/product_option_group_model.dart';
 
 part 'product_repository.g.dart';
 
@@ -22,4 +23,7 @@ abstract class ProductRepository {
 
   @GET('/list')
   Future<List<ProductModel>> getProductList();
+
+  @GET('/option/group/list')
+  Future<List<ProductOptionGroupModel>> getProductOptionGroupList();
 }

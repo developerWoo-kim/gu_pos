@@ -12,7 +12,7 @@ part 'product_category_repository.g.dart';
 
 final productCategoryRepositoryProvider = Provider((ref) {
   final dio = ref.watch(dioProvider);
-  final repository = ProductCategoryRepository(dio, baseUrl: '$ip/api/v1/pos/categories');
+  final repository = ProductCategoryRepository(dio, baseUrl: '$ip/api/v1/pos/product/categories');
   return repository;
 });
 
@@ -21,7 +21,7 @@ abstract class ProductCategoryRepository {
   factory ProductCategoryRepository(Dio dio, {String baseUrl})
   = _ProductCategoryRepository;
 
-  @GET('/products/list')
+  @GET('/list')
   Future<List<ProductCategoryModel>> getCategoryListWithProducts();
 
   @POST('/{categoryNm}')
