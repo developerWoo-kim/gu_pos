@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gu_pos/app/product/component/option_create_view.dart';
 import 'package:gu_pos/app/product/component/product_category_edit_view.dart';
 import 'package:gu_pos/app/product/provider/product_category_edit_provider.dart';
 import 'package:gu_pos/app/product/provider/product_category_provider.dart';
@@ -75,7 +76,7 @@ class _ProductEditViewState extends State<ProductEditView> {
                       hintText: '0',
                       suffixWidget: Padding(
                         padding: const EdgeInsets.only(right: 16),
-                        child: BodyText("원", textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_03,),
+                        child: BodyText("원", textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_02,),
                       ),
                     ),
                   ),
@@ -187,7 +188,7 @@ class _ProductEditViewState extends State<ProductEditView> {
                             icon: Icon(Icons.add, size: 14,),
                             onTap: () {
                               DialogUtil.basicLayout(context,
-                                content: ProductCategoryEditView()
+                                content: OptionCreateView()
                               );
                             },
                             radius: BorderRadius.circular(30),

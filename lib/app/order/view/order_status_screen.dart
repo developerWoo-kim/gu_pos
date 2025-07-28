@@ -389,7 +389,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 BodyText('매장 002', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.REGULAR_HALF),
-                                BodyText('09:26', color: TEXT_COLOR_03, textSize: BodyTextSize.SMALL_HALF),
+                                BodyText('09:26', color: TEXT_COLOR_02, textSize: BodyTextSize.SMALL_HALF),
                               ],
                             ),
                             SizedBox(height: 16,),
@@ -399,7 +399,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                                   height: 30,
                                   width: 30,
                                   decoration: BoxDecoration(
-                                    color: TEXT_COLOR_02,
+                                    color: TEXT_COLOR_03,
                                     shape: BoxShape.circle,
                                   ),
                                   child: Center(
@@ -498,7 +498,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     BodyText('매장 002', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.REGULAR_HALF),
-                                    BodyText('09:26', color: TEXT_COLOR_03, textSize: BodyTextSize.SMALL_HALF),
+                                    BodyText('09:26', color: TEXT_COLOR_02, textSize: BodyTextSize.SMALL_HALF),
                                   ],
                                 ),
                                 SizedBox(height: 16,),
@@ -508,7 +508,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                                       height: 30,
                                       width: 30,
                                       decoration: BoxDecoration(
-                                        color: TEXT_COLOR_02,
+                                        color: TEXT_COLOR_03,
                                         shape: BoxShape.circle,
                                       ),
                                       child: Center(
@@ -607,7 +607,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     BodyText('매장 002', color: TEXT_COLOR_01, fontWeight: FontWeight.w500, textSize: BodyTextSize.REGULAR_HALF),
-                                    BodyText('09:26', color: TEXT_COLOR_03, textSize: BodyTextSize.SMALL_HALF),
+                                    BodyText('09:26', color: TEXT_COLOR_02, textSize: BodyTextSize.SMALL_HALF),
                                   ],
                                 ),
                                 SizedBox(height: 16,),
@@ -617,7 +617,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                                       height: 30,
                                       width: 30,
                                       decoration: BoxDecoration(
-                                        color: TEXT_COLOR_02,
+                                        color: TEXT_COLOR_03,
                                         shape: BoxShape.circle,
                                       ),
                                       child: Center(
@@ -659,7 +659,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
-          child: BodyText('진행중인 주문이 없어요', color: TEXT_COLOR_02, textSize: BodyTextSize.REGULAR),
+          child: BodyText('진행중인 주문이 없어요', color: TEXT_COLOR_03, textSize: BodyTextSize.REGULAR),
         )
       ],
     );

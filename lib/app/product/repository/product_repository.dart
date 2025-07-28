@@ -26,4 +26,8 @@ abstract class ProductRepository {
 
   @GET('/option/group/list')
   Future<List<ProductOptionGroupModel>> getProductOptionGroupList();
+  
+  @POST('/option/group')
+  Future<ProductOptionGroupModel> createProductOptionGroup(@Body() Map<String, dynamic> json);
+
 }

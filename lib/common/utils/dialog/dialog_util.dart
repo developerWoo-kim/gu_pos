@@ -47,7 +47,7 @@ class DialogUtil {
                               onTap: () {
                                 Navigator.pop(context);
                               },
-                              child: const Icon(Icons.close_rounded, color: TEXT_COLOR_03, size: 42,)
+                              child: const Icon(Icons.close_rounded, color: TEXT_COLOR_02, size: 42,)
                             )
                           ],
                         ),

@@ -39,8 +39,8 @@ const INPUT_TEXT_COLOR_01 = Color(0xFF8a909f);
 const SLIDER_BOX_COLOR_01 = Color(0xFFf3f4f5);
 
 const TEXT_COLOR_01 = Color(0xFF515a68);
-const TEXT_COLOR_02 = Color(0xFF8d95a0);
-const TEXT_COLOR_03 = Color(0xFF6d7683);
+const TEXT_COLOR_02 = Color(0xFF6d7683);
+const TEXT_COLOR_03 = Color(0xFF8d95a0);
 const TEXT_COLOR_04 = Color(0xFFaeb8c0);
 
 const TEXT_COLOR_05 = Color(0xFF353d4a);

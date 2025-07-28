@@ -37,7 +37,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                     height: 55,
                     width: 60,
                     decoration: BoxDecoration(
-                        color: TEXT_COLOR_02,
+                        color: TEXT_COLOR_03,
                         borderRadius: BorderRadius.circular(7)
                     ),
                     child: Center(
@@ -228,7 +228,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                                             padding: const EdgeInsets.only(bottom: 4),
                                             child: Row(
                                               children: [
-                                                Expanded(child: BodyText('ㄴ ${itemOption.optionNm} (+${itemOption.optionPrice})',textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_02,))
+                                                Expanded(child: BodyText('ㄴ ${itemOption.optionNm} (+${itemOption.optionPrice})',textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_03,))
                                               ],
                                             ),
                                           );

@@ -159,7 +159,7 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                                             child: const Padding(
                                                 padding: EdgeInsets.symmetric(horizontal: 5,),
                                                 child: Center(
-                                                    child: Icon(Icons.add, size: 28, color: TEXT_COLOR_02,)
+                                                    child: Icon(Icons.add, size: 28, color: TEXT_COLOR_03,)
                                                 )
                                             ),
                                           ),
@@ -175,7 +175,7 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                                           child: const Padding(
                                               padding: EdgeInsets.symmetric(horizontal: 5,),
                                               child: Center(
-                                                  child: Icon(Icons.search, size: 28, color: TEXT_COLOR_02,)
+                                                  child: Icon(Icons.search, size: 28, color: TEXT_COLOR_03,)
                                               )
                                           ),
                                         ),
@@ -256,9 +256,9 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                             height: 34,
                             innerPadding: EdgeInsets.all(3.0),
                             children: {
-                              1: initial == 1 ? BodyText('포장', textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_01, fontWeight: FontWeight.w500,) : BodyText('포장', textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_02, fontWeight: FontWeight.w500,),
-                              2: initial == 2 ? BodyText('배달', textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_01, fontWeight: FontWeight.w500,) : BodyText('배달', textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_02, fontWeight: FontWeight.w500,),
-                              3: initial == 3 ? BodyText('대기', textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_01, fontWeight: FontWeight.w500,) : BodyText('대기', textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_02, fontWeight: FontWeight.w500,),
+                              1: initial == 1 ? BodyText('포장', textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_01, fontWeight: FontWeight.w500,) : BodyText('포장', textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_03, fontWeight: FontWeight.w500,),
+                              2: initial == 2 ? BodyText('배달', textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_01, fontWeight: FontWeight.w500,) : BodyText('배달', textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_03, fontWeight: FontWeight.w500,),
+                              3: initial == 3 ? BodyText('대기', textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_01, fontWeight: FontWeight.w500,) : BodyText('대기', textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_03, fontWeight: FontWeight.w500,),
                             },
                             decoration: BoxDecoration(
                               color: SLIDER_BOX_COLOR_01,
@@ -289,7 +289,7 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                           SizedBox(width: 8,),
                           Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8),
-                              child: Icon(Icons.print, color: TEXT_COLOR_03, size: 26,)
+                              child: Icon(Icons.print, color: TEXT_COLOR_02, size: 26,)
                           ),
                           InkWell(
                             onTap: () {
@@ -297,10 +297,10 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                             },
                             child: Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 8),
-                                child: Icon(Icons.delete, color: TEXT_COLOR_03, size: 26,)
+                                child: Icon(Icons.delete, color: TEXT_COLOR_02, size: 26,)
                             ),
                           ),
-                          Padding(padding: EdgeInsets.symmetric(horizontal: 8) ,child: Icon(Icons.bookmark, color: TEXT_COLOR_03, size: 26,)),
+                          Padding(padding: EdgeInsets.symmetric(horizontal: 8) ,child: Icon(Icons.bookmark, color: TEXT_COLOR_02, size: 26,)),
                         ],
                       ),
                     ),
@@ -539,21 +539,17 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
         final state = ref.watch(orderProvider);
         final selectedOrderProduct = state.orderProductList.where((e) => e.isSelected).firstOrNull;
 
-        if (selectedOrderProduct == null) {
+        final selectedProduct = selectedOrderProduct != null
+            ? ref.read(productCategoryProvider.notifier).findSelectedProduct(selectedOrderProduct.productId)
+            : null;
+
+        if (selectedProduct == null) {
           return const SizedBox(
             height: 150,
           );
         }
 
-        final optionGroupState = ref.watch(productOptionGroupProvider).value;
-
-        if ((optionGroupState ?? []).isEmpty) {
-          return const SizedBox(
-            height: 150,
-          );
-        }
-
-        final allOptions = optionGroupState!
+        final allOptions = selectedProduct.optionGroupList!
             .expand((group) => group.optionList)
             .toList();
 
@@ -577,7 +573,7 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
                           final option = allOptions[index];
                           return InkWell(
                             onTap: () {
-                              ref.read(orderProvider.notifier).addItemOption(selectedOrderProduct.productId,
+                              ref.read(orderProvider.notifier).addItemOption(selectedProduct.productId,
                                   option: OrderProductOption(
                                     optionId: option.productOptionId,
                                     optionNm: option.productOptionNm,
