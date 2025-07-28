@@ -29,4 +29,37 @@ class ProductOptionGroupAsyncNotifier extends AutoDisposeAsyncNotifier<List<Prod
     }
   }
 
+  /// 필요 시 새로고침 기능 제공
+  Future<void> reload() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async => await _fetchList());
+  }
+
+  Future<void> addOptionGroup(ProductOptionGroupModel model) async{
+    final currentState = state.value ?? [];
+    currentState.add(model);
+    final newState = currentState;
+    state = AsyncData(newState);
+  }
+
+  Future<void> select(int optionGroupId) async {
+    final currentState = state.value ?? [];
+
+    final index = currentState.indexWhere((e) => e.productOptionGroupId == optionGroupId);
+
+    late ProductOptionGroupModel newOptionGroup;
+
+    if(currentState[index].isSelected) {
+      newOptionGroup = currentState[index].copyWith(isSelected: false);
+    } else {
+      newOptionGroup = currentState[index].copyWith(isSelected: true);
+    }
+
+    currentState[index] = newOptionGroup;
+
+    final newState = currentState;
+
+    state = AsyncData(newState);
+  }
+
 }

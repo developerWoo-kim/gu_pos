@@ -17,6 +17,7 @@ ProductOptionGroupModel _$ProductOptionGroupModelFromJson(
       optionList: (json['optionList'] as List<dynamic>)
           .map((e) => ProductOptionModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      isSelected: json['isSelected'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$ProductOptionGroupModelToJson(
@@ -28,4 +29,5 @@ Map<String, dynamic> _$ProductOptionGroupModelToJson(
       'maxSelectionCount': instance.maxSelectionCount,
       'sortOrder': instance.sortOrder,
       'optionList': instance.optionList,
+      'isSelected': instance.isSelected,
     };

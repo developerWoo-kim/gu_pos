@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gu_pos/app/product/model/product_option_model.dart';
+import 'package:gu_pos/app/product/provider/product_category_provider.dart';
+import 'package:gu_pos/app/product/provider/product_option_group_provider.dart';
 import 'package:gu_pos/app/product/repository/product_repository.dart';
 import 'package:gu_pos/app/product/repository/request/product_option_group_edit_provider_model_request.dart';
 import 'package:uuid/v1.dart';
@@ -24,7 +26,9 @@ class ProductOptionGroupEditNotifier extends StateNotifier<ProductOptionGroupEdi
   void saveOptionGroup() async {
     final json = state.toCreateRequestJson();
 
-    await repository.createProductOptionGroup(json);
+    final model = await repository.createProductOptionGroup(json);
+
+    ref.read(productOptionGroupProvider.notifier).addOptionGroup(model);
   }
 
   void addOption() {

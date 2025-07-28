@@ -27,7 +27,7 @@ class ProductCategoryAsyncNotifier extends AsyncNotifier<List<ProductCategoryMod
     }
   }
 
-  /// 필요 시 새로고침 기능 제공
+  /// 새로고침
   Future<void> reload() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async => await _fetchCategoryList());

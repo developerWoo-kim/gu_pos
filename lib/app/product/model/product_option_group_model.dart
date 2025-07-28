@@ -13,6 +13,8 @@ class ProductOptionGroupModel {
 
   final List<ProductOptionModel> optionList;
 
+  final bool isSelected;
+
   ProductOptionGroupModel({
     required this.productOptionGroupId,
     required this.productOptionGroupNm,
@@ -20,6 +22,7 @@ class ProductOptionGroupModel {
     required this.maxSelectionCount,
     required this.sortOrder,
     required this.optionList,
+    this.isSelected = false,
   });
 
   ProductOptionGroupModel copyWith({
@@ -29,6 +32,7 @@ class ProductOptionGroupModel {
     int? maxSelectionCount,
     int? sortOrder,
     List<ProductOptionModel>? optionList,
+    bool? isSelected,
   }) {
     return ProductOptionGroupModel(
       productOptionGroupId: productOptionGroupId ?? this.productOptionGroupId,
@@ -37,6 +41,7 @@ class ProductOptionGroupModel {
       maxSelectionCount: maxSelectionCount ?? this.maxSelectionCount,
       sortOrder: sortOrder ?? this.sortOrder,
       optionList : optionList ?? this.optionList,
+      isSelected: isSelected ?? this.isSelected,
     );
   }
 

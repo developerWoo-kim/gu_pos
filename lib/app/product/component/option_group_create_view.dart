@@ -10,14 +10,14 @@ import '../../../common/component/text/body_text.dart';
 import '../../../common/const/colors.dart';
 import '../provider/product_option_group_edit_provider.dart';
 
-class OptionCreateView extends ConsumerStatefulWidget {
-  const OptionCreateView({super.key});
+class OptionGroupCreateView extends ConsumerStatefulWidget {
+  const OptionGroupCreateView({super.key});
 
   @override
-  ConsumerState<OptionCreateView> createState() => _OptionCreateViewState();
+  ConsumerState<OptionGroupCreateView> createState() => _OptionCreateViewState();
 }
 
-class _OptionCreateViewState extends ConsumerState<OptionCreateView> {
+class _OptionCreateViewState extends ConsumerState<OptionGroupCreateView> {
   int optionCount = 1;
 
   List<ProductOptionModel> optionList = [
@@ -198,7 +198,6 @@ class _OptionCreateViewState extends ConsumerState<OptionCreateView> {
                   children: [
                     InkWell(
                       onTap: () {
-                        ToastUtil.showToast(context);
                         Navigator.pop(context);
                       },
                       child: BasicButtonV2(
@@ -216,6 +215,8 @@ class _OptionCreateViewState extends ConsumerState<OptionCreateView> {
                       onTap: ref.read(productOptionGroupEditProvider.notifier).isReadyForSave()
                         ? () {
                           ref.read(productOptionGroupEditProvider.notifier).saveOptionGroup();
+                          Navigator.pop(context);
+                          ToastUtil.showToast(context);
                         }
                         : null,
                       child: BasicButtonV2(
