@@ -162,10 +162,8 @@ class _ProductCreateViewState extends ConsumerState<ProductCreateView> {
                     const SizedBox(width: 8,),
                     InkWell(
                       onTap: ref.read(productEditProvider.notifier).isReadyForSave()
-                          ? () {
-                            final state = ref.read(productEditProvider);
-                            print(state);
-                            // ref.read(productEditProvider.notifier).saveOptionGroup();
+                          ? () async {
+                            await ref.read(productEditProvider.notifier).saveProduct();
                             Navigator.pop(context);
                             ToastUtil.showToast(context);
                           }
@@ -284,7 +282,6 @@ class _ProductCreateViewState extends ConsumerState<ProductCreateView> {
                               ),
                               onTap: () {
                                 ref.read(productOptionGroupProvider.notifier).select(optionGroup.productOptionGroupId);
-                                ref.read(productEditProvider.notifier).addOptionGroup(optionGroup.productOptionGroupId);
                               },
                               radius: BorderRadius.circular(30),
                               backgroundColor: optionGroup.isSelected ? COLOR_eaf3fe : COLOR_f3f4f6,

@@ -79,6 +79,34 @@ class _ProductRepository implements ProductRepository {
   }
 
   @override
+  Future<ProductModel> createProduct(Map<String, dynamic> json) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(json);
+    final _options = _setStreamType<ProductModel>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/create',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ProductModel _value;
+    try {
+      _value = ProductModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<ProductOptionGroupModel> createProductOptionGroup(
     Map<String, dynamic> json,
   ) async {

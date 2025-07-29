@@ -123,13 +123,13 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              width: 350,
+                              width: 340,
                               child: TabBar(
                                 tabs: [
-                                  Container(height: 45, alignment: Alignment.center,child: const Text('전체', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
-                                  Container(height: 45, alignment: Alignment.center,child: const Text('진행', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
-                                  Container(height: 45,alignment: Alignment.center, child: const Text('완료', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
-                                  Container(height: 45,alignment: Alignment.center, child: const Text('취소', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
+                                  Container(height: 45, alignment: Alignment.center,child: const Text('전체', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),)),
+                                  Container(height: 45, alignment: Alignment.center,child: const Text('진행', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),)),
+                                  Container(height: 45,alignment: Alignment.center, child: const Text('완료', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),)),
+                                  Container(height: 45,alignment: Alignment.center, child: const Text('취소', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),)),
                                 ],
                                 indicator: BoxDecoration(
                                     border: Border(

@@ -69,6 +69,23 @@ class ProductCategoryAsyncNotifier extends AsyncNotifier<List<ProductCategoryMod
     state = AsyncData(newList);
   }
 
+  Future<void> addProduct(int categoryId, {
+    required ProductModel model
+  }) async {
+    final currentState = state.value ?? [];
+
+    final index = currentState.indexWhere((e) => e.categoryId == categoryId);
+
+    final newProductList = currentState[index].productList;
+    newProductList.add(model);
+
+    final newCategory = currentState[index].copyWith(productList: newProductList);
+
+    currentState[index] = newCategory;
+
+    state = AsyncData(currentState);
+  }
+
   ProductModel? findSelectedProduct(int selectedProductId) {
     final categoryList = state.value ?? [];
 

@@ -83,15 +83,19 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
           children: [
             // 왼쪽: 아이콘
             Expanded(
-              child: InkWell(
-                onTap: () {
-                  scaffoldKey.currentState!.openDrawer();
-                },
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Icon(Icons.dehaze_sharp, color: PRIMARY_COLOR_04, size: 38),
+              child: Container(
+                width: 38,
+                height: 38,
+                child: InkWell(
+                  onTap: () {
+                    scaffoldKey.currentState!.openDrawer();
+                  },
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Icon(Icons.menu_sharp, color: PRIMARY_COLOR_04, size: 32),
+                  ),
                 ),
-              ),
+              )
             ),
 
             // 가운데: 주문 | 현황
