@@ -100,9 +100,8 @@ class _ProductCreateViewState extends ConsumerState<ProductCreateView> {
                                       onChanged: (value) {
                                         int? intValue = int.tryParse(value);
                                         if (intValue != null) {
-
+                                          ref.read(productEditProvider.notifier).changeValue(productPrice: intValue);
                                         }
-                                        ref.read(productEditProvider.notifier).changeValue(productPrice: intValue);
                                       },
                                     ),
                                   ),
@@ -128,6 +127,38 @@ class _ProductCreateViewState extends ConsumerState<ProductCreateView> {
                                   ),
                                 ],
                               ),
+                              if(ref.read(productEditProvider).stockAt == 'Y')
+                              Column(
+                                children: [
+                                  const SizedBox(height: 10,),
+                                  Row(
+                                    children: [
+                                      BodyText("현재 수량", textSize: BodyTextSize.REGULAR, color: COLOR_505967,),
+                                      BodyText("・", textSize: BodyTextSize.LARGE, color: COLOR_d23e41,),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8,),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: BasicTextFormField(
+                                          hintText: '0',
+                                          suffixWidget: Padding(
+                                            padding: const EdgeInsets.only(right: 16),
+                                            child: BodyText("개", textSize: BodyTextSize.REGULAR, color: TEXT_COLOR_02,),
+                                          ),
+                                          onChanged: (value) {
+                                            int? intValue = int.tryParse(value);
+                                            if (intValue != null) {
+                                              ref.read(productEditProvider.notifier).changeValue(stockCount: intValue);
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              )
                             ],
                           ),
                         ],
@@ -165,7 +196,7 @@ class _ProductCreateViewState extends ConsumerState<ProductCreateView> {
                           ? () async {
                             await ref.read(productEditProvider.notifier).saveProduct();
                             Navigator.pop(context);
-                            ToastUtil.showToast(context);
+                            ToastUtil.showToast(context, content: '새로운 상품이 등록되었어요');
                           }
                           : null,
                       child: BasicButtonV2(

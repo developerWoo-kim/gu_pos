@@ -28,6 +28,9 @@ abstract class OrderRepository {
   @PUT('/cancel/{orderId}')
   Future<void> cancelOrder({@Path() required int orderId});
 
+  @PUT('/cancel-complete/{orderId}')
+  Future<void> cancelCompletedOrder({@Path() required int orderId});
+
   @GET('/list')
   Future<List<OrderModel>> getOrderList();
 }

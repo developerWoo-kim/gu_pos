@@ -77,7 +77,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 1,
-                            blurRadius: 7,
+                            blurRadius: 2,
                             offset: Offset(0, 3), // changes position of shadow
                           ),
                         ],
@@ -146,7 +146,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                           ),
                           const Spacer(),
                           if(widget.order.orderStatus == OrderStatus.CANCEL)
-                            BasicButton('결제내역 보기',
+                            BasicButton('결제내역',
                               backgroundColor: COLOR_f3f4f6,
                               textColor: TEXT_COLOR_01
                             ),
@@ -154,7 +154,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: BasicButton('결제내역 보기',
+                                  child: BasicButton('결제내역',
                                       backgroundColor: COLOR_f3f4f6,
                                       textColor: TEXT_COLOR_01
                                   ),
@@ -184,7 +184,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 1,
-                          blurRadius: 7,
+                          blurRadius: 2,
                           offset: Offset(0, 3), // changes position of shadow
                         ),
                       ],
@@ -310,7 +310,7 @@ class _OrderStatusViewState extends ConsumerState<OrderStatusView> {
   Widget _buildCompleteCancelButton() {
     return InkWell(
       onTap: () {
-        ref.read(orderStatusProvider.notifier).cancel(widget.order.orderId!);
+        ref.read(orderStatusProvider.notifier).cancelComplete(widget.order.orderId!);
       },
       child: BasicButton('완료 취소',
           backgroundColor: TEXT_COLOR_04,

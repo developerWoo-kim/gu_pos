@@ -216,7 +216,7 @@ class _OptionCreateViewState extends ConsumerState<OptionGroupCreateView> {
                         ? () {
                           ref.read(productOptionGroupEditProvider.notifier).saveOptionGroup();
                           Navigator.pop(context);
-                          ToastUtil.showToast(context);
+                          ToastUtil.showToast(context, content: '새로운 옵션이 등록되었어요');
                         }
                         : null,
                       child: BasicButtonV2(

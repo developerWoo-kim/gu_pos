@@ -10,6 +10,7 @@ class HoverButton extends StatefulWidget {
   final BorderRadiusGeometry? radius;
   final Icon? icon;
   final EdgeInsetsGeometry? padding;
+  final MainAxisAlignment? mainAxisAlignment;
   final VoidCallback? onTap;
 
   const HoverButton({
@@ -19,6 +20,7 @@ class HoverButton extends StatefulWidget {
     this.radius,
     this.icon,
     this.padding,
+    this.mainAxisAlignment,
     this.onTap,
     super.key,
   });
@@ -46,10 +48,11 @@ class _HoverButtonState extends State<HoverButton> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: widget.mainAxisAlignment ?? MainAxisAlignment.center,
                 children: [
                   if(widget.icon != null)
                     widget.icon!,
+                    const SizedBox(width: 6,),
                     widget.text
                 ],
               ),

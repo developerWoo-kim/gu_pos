@@ -549,6 +549,12 @@ class _OrderTestScreenState extends ConsumerState<OrderScreen> with TickerProvid
           );
         }
 
+        if(selectedProduct.optionGroupList!.isEmpty) {
+          return const SizedBox(
+            height: 150,
+          );
+        }
+
         final allOptions = selectedProduct.optionGroupList!
             .expand((group) => group.optionList)
             .toList();

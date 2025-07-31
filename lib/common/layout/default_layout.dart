@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gu_pos/app/order/model/order_model.dart';
 import 'package:gu_pos/app/order/provider/order_status_provider.dart';
 import 'package:gu_pos/app/order/view/order_status_screen.dart';
 import 'package:gu_pos/app/order/view/order_screen.dart';
+import 'package:gu_pos/common/component/button/basic_button_v2.dart';
+import 'package:gu_pos/common/component/button/hover_button.dart';
+import 'package:gu_pos/common/layout/side_menu.dart';
 
 import '../../app/order/service/order_socket_service.dart';
 import '../component/text/body_text.dart';
@@ -13,13 +17,15 @@ class DefaultLayout extends ConsumerStatefulWidget {
   final Widget body;
   final Color? backgroundColor;
   final Widget? bottomNavigationBar;
+  final int selectedTapIndex;
 
   const DefaultLayout({super.key,
       this.appBar,
       required this.body,
       this.backgroundColor,
-      this.bottomNavigationBar
-      });
+      this.bottomNavigationBar,
+      this.selectedTapIndex = 0,
+    });
 
   @override
   ConsumerState<DefaultLayout> createState() => _DefaultLayoutState();
@@ -59,7 +65,12 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
       extendBody: true,
       backgroundColor: widget.backgroundColor ?? PRIMARY_COLOR_04,
       appBar: widget.appBar,
-      drawer: Drawer(),
+      drawer: Drawer(
+        backgroundColor: PRIMARY_COLOR_04,
+        width: 610,
+        shape: const RoundedRectangleBorder(),
+        child: _buildDrawerContent(),
+      ),
       body: SizedBox.expand(
         child: Column(
           children: [
@@ -83,19 +94,24 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
           children: [
             // 왼쪽: 아이콘
             Expanded(
-              child: Container(
-                width: 38,
-                height: 38,
-                child: InkWell(
-                  onTap: () {
-                    scaffoldKey.currentState!.openDrawer();
-                  },
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Icon(Icons.menu_sharp, color: PRIMARY_COLOR_04, size: 32),
-                  ),
-                ),
-              )
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 38,
+                      height: 38,
+                      child: InkWell(
+                        onTap: () {
+                          scaffoldKey.currentState!.openDrawer();
+                        },
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Icon(Icons.menu_sharp, color: PRIMARY_COLOR_04, size: 34),
+                        ),
+                      ),
+                    )
+                  ],
+                )
             ),
 
             // 가운데: 주문 | 현황
@@ -113,7 +129,10 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
                         ),
                       );
                     },
-                    child: BodyText('주문', textSize: BodyTextSize.MEDIUM, color: PRIMARY_COLOR_04),
+                    child: BodyText('주문',
+                        textSize: BodyTextSize.MEDIUM,
+                        color: widget.selectedTapIndex == 0 ? PRIMARY_COLOR_04 : TEXT_COLOR_04
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -147,6 +166,8 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
       loading: () => const CircularProgressIndicator(),
       error: (e, _) => const Text('에러'),
       data: (orders) {
+        final orderState = state.value ?? [];
+        final inProgressCount = orderState.where((e) => e.orderStatus == OrderStatus.PROGRESS).toList().length;
         return InkWell(
             onTap: () {
               Navigator.of(context).push(
@@ -162,9 +183,9 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
               children: [
                 BodyText('현황',
                     textSize: BodyTextSize.MEDIUM,
-                    color: TEXT_COLOR_04
+                    color: widget.selectedTapIndex == 1 ? PRIMARY_COLOR_04 : TEXT_COLOR_04
                 ),
-                if(state.value!.isNotEmpty)
+                if(inProgressCount > 0)
                   Padding(
                     padding: const EdgeInsets.only(left: 6),
                     child: Container(
@@ -175,7 +196,7 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
                         shape: BoxShape.circle,
                       ),
                       child: Center(
-                        child: BodyText('${state.value!.length}', color: PRIMARY_COLOR_04, textSize: BodyTextSize.SMALL),
+                        child: BodyText('$inProgressCount', color: PRIMARY_COLOR_04, textSize: BodyTextSize.SMALL),
                       ),
                     ),
                   ),
@@ -185,4 +206,69 @@ class _DefaultLayoutState extends ConsumerState<DefaultLayout> {
       },
     );
   }
+  
+  Widget _buildDrawerContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.close_sharp, size: 26, color: COLOR_6e7784,),
+                const SizedBox(height: 30,),
+                Row(
+                  children: [
+                    BodyText('아침이 맑은 카페', color: BODY_TEXT_COLOR_02, textSize: BodyTextSize.HUGE_HALF, fontWeight: FontWeight.w500,),
+                    const Icon(Icons.arrow_forward_ios_rounded, size: 16,)
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 30,),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight
+                    ),
+                    child: const IntrinsicHeight(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: SideMenu()
+                      ),
+                    ),
+                  ),
+                );
+              }
+            ),
+          ),
+          const SizedBox(height: 20,),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                Expanded(
+                    child: BasicButtonV2(
+                        text: BodyText('돈통 열기',
+                          textSize: BodyTextSize.REGULAR_HALF,
+                          color: TEXT_COLOR_05,
+                        ),
+                        backgroundColor: COLOR_f3f4f6
+                    )
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
 }

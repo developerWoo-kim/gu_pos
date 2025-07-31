@@ -100,6 +100,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
+      selectedTapIndex: 1,
       body: Expanded(
         child: Row(
           children: [
@@ -382,7 +383,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 16, bottom: 20, left: 12, right: 12),
+                        padding: const EdgeInsets.only(top: 12, bottom: 20, left: 12, right: 12),
                         child: Column(
                           children: [
                             Row(
@@ -392,7 +393,7 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                                 BodyText('09:26', color: TEXT_COLOR_02, textSize: BodyTextSize.SMALL_HALF),
                               ],
                             ),
-                            SizedBox(height: 16,),
+                            SizedBox(height: 14,),
                             Row(
                               children: [
                                 Container(

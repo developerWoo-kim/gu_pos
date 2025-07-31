@@ -59,8 +59,8 @@ class OrderAsyncNotifier extends AsyncNotifier<List<OrderModel>> {
     // state = updatedList;
   }
 
-  void cancel(int orderId) async{
-    await repository.cancelOrder(orderId: orderId);
+  void cancelComplete(int orderId) async{
+    await repository.cancelCompletedOrder(orderId: orderId);
     reload();
     // final index = state.indexWhere((order) => order.orderIndex == orderIndex);
     // final updatedList = [...state];
