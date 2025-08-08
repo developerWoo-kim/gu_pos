@@ -215,7 +215,16 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                         child: state.when(
                             data: (orders) {
                               if(orders.isNotEmpty) {
-                                return OrderStatusView(order: orders.where((order) => order.orderId == selectedIndex).first);
+
+                                if(selectedIndex == 0) {
+                                  return OrderStatusView(
+                                      order: orders.first
+                                  );
+                                }
+
+                                return OrderStatusView(
+                                    order: orders.where((order) => order.orderId == selectedIndex).first
+                                );
                               }
                               return const Text('표시할 주문이 없어요');
                             },
@@ -233,7 +242,17 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                         //     : const Center(child: Text('표시할 주문이 없어요'),)
                         child: state.when(
                             data: (orders) {
-                              if(orders.where((order) => order.orderStatus == OrderStatus.PROGRESS).firstOrNull != null) {
+
+                              final progressList = orders.where((order) => order.orderStatus == OrderStatus.PROGRESS);
+
+                              if(progressList.isNotEmpty) {
+
+                                if(selectedIndex == 0) {
+                                  return OrderStatusView(
+                                      order: progressList.first
+                                  );
+                                }
+
                                 return OrderStatusView(order: orders.where((order) => order.orderId == selectedIndex).first);
                               }
                               return const Text('표시할 주문이 없어요');
@@ -252,9 +271,20 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                         //     : const Center(child: Text('표시할 주문이 없어요'),)
                         child: state.when(
                             data: (orders) {
-                              if(orders.where((order) => order.orderStatus == OrderStatus.COMPLETE).firstOrNull != null) {
+
+                              final completeList = orders.where((order) => order.orderStatus == OrderStatus.COMPLETE);
+
+                              if(completeList.isNotEmpty) {
+
+                                if(selectedIndex == 0) {
+                                  return OrderStatusView(
+                                      order: completeList.first
+                                  );
+                                }
+
                                 return OrderStatusView(order: orders.where((order) => order.orderId == selectedIndex).first);
                               }
+
                               return const Text('표시할 주문이 없어요');
                             },
                             error: (e, _) => const Text('에러'),
@@ -271,7 +301,16 @@ class _OrderStatusScreenState extends ConsumerState<OrderStatusScreen> with Tick
                         //     : const Center(child: Text('표시할 주문이 없어요'),)
                         child: state.when(
                             data: (orders) {
-                              if(orders.where((order) => order.orderStatus == OrderStatus.CANCEL).firstOrNull != null) {
+                              final cancelList = orders.where((order) => order.orderStatus == OrderStatus.CANCEL);
+
+                              if(cancelList.isNotEmpty) {
+
+                                if(selectedIndex == 0) {
+                                  return OrderStatusView(
+                                      order: cancelList.first
+                                  );
+                                }
+
                                 return OrderStatusView(order: orders.where((order) => order.orderId == selectedIndex).first);
                               }
                               return const Text('표시할 주문이 없어요');
